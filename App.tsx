@@ -2,7 +2,7 @@ import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-import HomeScreen from './Screens/HomeScreen'
+import { HomeScreen } from './Screens/HomeScreen'
 
 import { StyleSheet } from 'react-native';
 
@@ -15,10 +15,10 @@ const AppNavigator = createStackNavigator({
 
 const AppContainer = createAppContainer(AppNavigator);
 
-export default class App extends React.Component {
-  render() {
-    return <AppContainer />;
-  }
+export default () => {
+
+  return <AppContainer />;
+
 }
 
 const styles = StyleSheet.create({
