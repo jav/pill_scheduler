@@ -1,33 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-import { AppContextConsumer } from '../Context/Context';
+import { AppContext } from '../Context/Context';
 
 import { StyleSheet, Text, View, Button } from 'react-native';
 
 class Props { }
 
 export const HomeScreen = (props: Props) => {
+    const { counter, list } = useContext(AppContext);
     return (
-        <AppContextConsumer>
-            {appContext =>
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <Text>Home Screen</Text>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text>Home Screen</Text>
 
 
-                    <Text>
-                        Counter: {appContext.counter},
+            <Text>
+                Counter: {counter},
                         List: {
-                            appContext.list.length > 0 ?
-                                appContext.list.map((e) => <Text key={e}>{e}</Text>) :
-                                <Text>List is empty</Text>}
-                    </Text>
-                    <Button title="Append" onPress={() => { }} />
-                    <Button title="Prepend" onPress={() => { }} />
-                </View>
-            }
-        </AppContextConsumer>
+                    list.length > 0 ?
+                        list.map((e) => <Text key={e}>{e}</Text>) :
+                        <Text>List is empty</Text>}
+            </Text>
+            <Button title="Append" onPress={() => { }} />
+            <Button title="Prepend" onPress={() => { }} />
+        </View>
     );
-
 }
 
 const styles = StyleSheet.create({

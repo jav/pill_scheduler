@@ -16,5 +16,7 @@ export const initialState: IContext = {
 };
 
 const context = React.createContext<typeof initialState>(initialState);
+
 export const AppContextProvider = context.Provider;
 export const AppContextConsumer = context.Consumer;
+export const AppContext = context;
