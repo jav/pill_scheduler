@@ -1,22 +1,47 @@
-import React, { Context } from "react";
-import Reducer from './Reducer'
+import React from "react";
+
+import Administration from '../Types/Administration'
 
 export interface IContext {
-    counter: number,
-    list: number[],
-    administrations: Object[],
+    administrations: Administration[],
     error: string | null
 };
 
 export const initialState: IContext = {
-    counter: 0,
-    list: [4,5],
     administrations: [],
     error: null
 };
 
-const context = React.createContext<typeof initialState>(initialState);
+interface ContextType {
+    state: typeof initialState;
+    dispatch: (action: ActionType) => void;
+}
+
+const context = React.createContext<ContextType>({
+    state: initialState,
+    dispatch: () => { }
+});
 
 export const AppContextProvider = context.Provider;
 export const AppContextConsumer = context.Consumer;
 export const AppContext = context;
+
+
+export type ActionType = {
+    type: 'addAdministration'
+}
+
+export const reducer = (state: IContext, action: ActionType) => {
+    switch (action.type) {
+        case 'addAdministration':
+            console.log("addAdministration, state:", state);
+            return {
+                ...state,
+                administrations:
+                    [...state.administrations, new Administration(0, "noname")]
+            }
+                ;
+        default:
+            return state;
+    }
+}

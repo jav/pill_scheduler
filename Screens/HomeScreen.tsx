@@ -1,27 +1,24 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
-import { AppContext } from '../Context/Context';
+import { reducer, initialState } from '../Context/Context';
 
 import { StyleSheet, Text, View, Button } from 'react-native';
 
 class Props { }
 
 export const HomeScreen = (props: Props) => {
-    const { counter, list } = useContext(AppContext);
+    const [state, dispatch] = React.useReducer(reducer, initialState);
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Text>Home Screen</Text>
-
-
             <Text>
-                Counter: {counter},
+                Administration list
                         List: {
-                    list.length > 0 ?
-                        list.map((e) => <Text key={e}>{e}</Text>) :
+                    state.administrations.length > 0 ?
+                        state.administrations.map((e, i) => <Text key={i}>{e.pill}</Text>) :
                         <Text>List is empty</Text>}
             </Text>
-            <Button title="Append" onPress={() => { }} />
-            <Button title="Prepend" onPress={() => { }} />
+            <Button title="Append" onPress={() => dispatch({ type: 'addAdministration' })} />
         </View>
     );
 }
