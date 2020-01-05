@@ -2,7 +2,8 @@ import React from 'react';
 
 import { reducer, initialState } from '../Context/Context';
 
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { Button } from 'react-native-material-ui';
+import { StyleSheet, Text, View } from 'react-native';
 
 class Props { }
 
@@ -10,6 +11,7 @@ export const HomeScreen = (props: Props) => {
     const [state, dispatch] = React.useReducer(reducer, initialState);
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+
             <Text>Home Screen</Text>
             <Text>
                 Administration list
@@ -18,7 +20,7 @@ export const HomeScreen = (props: Props) => {
                         state.administrations.map((e, i) => <Text key={i}>{e.pill}</Text>) :
                         <Text>List is empty</Text>}
             </Text>
-            <Button title="Append" onPress={() => dispatch({ type: 'addAdministration' })} />
+            <Button raised primary text="Append" onPress={() => dispatch({ type: 'addAdministration' })} />
         </View>
     );
 }
