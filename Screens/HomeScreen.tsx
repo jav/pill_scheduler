@@ -3,15 +3,16 @@ import React from 'react';
 import { reducer, initialState } from '../Context/Context';
 
 import { Button } from 'react-native-material-ui';
+import { ActionButtonFixShadowRadiusNANBug as ActionButton } from '../Components/ActionButtonFixShadowRadiusNANBug';
 import { StyleSheet, Text, View } from 'react-native';
 
-class Props { }
+interface Props { }
 
 export const HomeScreen = (props: Props) => {
     const [state, dispatch] = React.useReducer(reducer, initialState);
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-
+            <ActionButton />
             <Text>Home Screen</Text>
             <Text>
                 Administration list
