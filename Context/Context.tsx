@@ -27,13 +27,23 @@ export const AppContextConsumer = context.Consumer;
 export const AppContext = context;
 
 
-export type ActionType = {
-    type: 'addAdministration'
+export type ActionType = ActionAddAdministration;
+
+export const ADD_ADMINISTRATION = "ADD_ADMINISTRATION";
+export interface ActionAddAdministration {
+    type: typeof ADD_ADMINISTRATION
+    payload: string
+}
+export const addAdministration = (pillName: string): ActionAddAdministration => {
+    return {
+        type: ADD_ADMINISTRATION,
+        payload: pillName
+    }
 }
 
 export const reducer = (state: IContext, action: ActionType) => {
     switch (action.type) {
-        case 'addAdministration':
+        case ADD_ADMINISTRATION:
             console.log("addAdministration, state:", state);
             return {
                 ...state,
