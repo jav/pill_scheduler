@@ -1,9 +1,9 @@
 class Administration {
-    time: number;
+    time: Date;
     pill: string;
 
-    constructor(time: number, pill: string) {
-        this.time = time;
+    constructor(time: Date, pill: string) {
+        this.time = new Date(time);
         this.pill = pill;
     }
 }

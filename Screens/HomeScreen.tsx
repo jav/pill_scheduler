@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { reducer, initialState, addAdministration } from '../Context/Context';
+import { addAdministration, AppContext } from '../Context/Context';
 
-
-import { Button } from 'react-native-material-ui';
 import { ActionButtonFixShadowRadiusNANBug as ActionButton } from '../Components/ActionButtonFixShadowRadiusNANBug';
+import { AdministrationHistoryView } from '../Components/AdministrationHistoryView';
+import { CurrentTime } from '../Components/CurrentTime';
+
 import { StyleSheet, Text, View } from 'react-native';
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -12,20 +13,27 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 interface Props { }
 
 export const HomeScreen = (props: Props) => {
-    const [state, dispatch] = React.useReducer(reducer, initialState);
+    const {state, dispatch} = React.useContext(AppContext);
 
+    const {time, administrations}  = state;
     const paracetamolKey = 'Paracetamol';
     const NSAIDKey = 'NSAID';
 
-    function handlePillAdd(pillName) {
+    function handlePillAdd(time, pillName) {
         if ([paracetamolKey, NSAIDKey].includes(pillName)) {
-            dispatch(addAdministration(pillName));
+            dispatch(addAdministration(time, pillName));
         }
     }
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <ActionButton onPress={(pillName) => handlePillAdd(pillName)}
+            {console.log("redrawn with state:", state)}
+            <Text>
+                Home Screen
+            </Text>
+            <CurrentTime currentTime={time} />
+            <AdministrationHistoryView administrationList={administrations} currentTime={time} />
+            <ActionButton onPress={(pillName) => handlePillAdd(time, pillName)}
                 actions={
                     [
                         { icon: < Icon key={paracetamolKey} name="pill" size={30} color="#fff" />, label: "Paracteamol-label" },
@@ -35,25 +43,6 @@ export const HomeScreen = (props: Props) => {
                 transition="speedDial"
                 icon={<Icon name="pill" size={30} color="#fff" />}
             />
-            <Text>
-                Home Screen
-            </Text>
-            <Text>
-                Administration list
-                        List: {
-                    state.administrations.length > 0 ?
-                        state.administrations.map((e, i) => <Text key={i}>{e.pill}</Text>) :
-                        <Text>List is empty</Text>}
-            </Text>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
