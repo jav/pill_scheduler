@@ -21,57 +21,21 @@ const uiTheme = {
   },
 };
 
-
 const AppNavigator = createStackNavigator({
   Home: {
     screen: HomeScreen,
   },
+  EditAdministration: {
+    screen: EditAdministrationScreen
+  }
 });
 
 
 const AppContainer = createAppContainer(AppNavigator);
 
-class SingletonInterval {
-  // TODO: Switch to useInterval() https://overreacted.io/making-setinterval-declarative-with-react-hooks/
-  private static instance: SingletonInterval = null;
-  private intervalId: number;
-  private static intervalHasBeenSet = false;
-
-  public static getInstance(): SingletonInterval {
-    if (!SingletonInterval.instance) {
-      SingletonInterval.instance = new SingletonInterval();
-    }
-    return SingletonInterval.instance;
-  }
-  public setInterval(f: () => void, interval: number): boolean {
-    if (SingletonInterval.intervalHasBeenSet) {
-      clearInterval(this.intervalId);
-    }
-    this.intervalId = setInterval(() => f(), interval);
-    SingletonInterval.intervalHasBeenSet = true;
-    return true;
-  }
-
-  public clearInterval(): void {
-    clearInterval(this.intervalId);
-  }
-}
 
 export default () => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
-
-  let clockUpdateFrequency = 5000;
-  let clockResolution = 15000;
-
-  useRef(SingletonInterval.getInstance().setInterval(
-    () => {
-      dispatch(updateClock(
-        new Date(
-          Math.floor(new Date().getTime() / clockResolution) * clockResolution
-        )
-      ))
-    }
-    , clockUpdateFrequency));
 
   // According to article (https://hswolff.com/blog/how-to-usecontext-with-usereducer/), passing in
   // value={state, dispatch} in AppContext.Provider create a new object if App is rerendered, triggering

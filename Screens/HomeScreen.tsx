@@ -1,6 +1,6 @@
 import React from 'react';
-
-import { addAdministration, AppContext } from '../Context/Context';
+import { useInterval } from '../Functions/useInterval';
+import { addAdministration, AppContext, updateClock } from '../Context/Context';
 
 import { ActionButtonFixShadowRadiusNANBug as ActionButton } from '../Components/ActionButtonFixShadowRadiusNANBug';
 import { AdministrationHistoryView } from '../Components/AdministrationHistoryView';
@@ -12,12 +12,27 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 interface Props { }
 
-export const HomeScreen = (props: Props) => {
-    const {state, dispatch} = React.useContext(AppContext);
 
-    const {time, administrations}  = state;
+export const HomeScreen = (props: Props) => {
+    const { state, dispatch } = React.useContext(AppContext);
+
+    const { time, administrations } = state;
     const paracetamolKey = 'Paracetamol';
     const NSAIDKey = 'NSAID';
+    const clockUpdateFrequency = 5000;
+    const clockResolution = 15000;
+
+    useInterval(() => {
+        dispatch(
+            updateClock(
+                new Date(
+                    Math.floor(new Date().getTime() / clockResolution) * clockResolution
+                )
+            ))
+
+    }
+        , clockUpdateFrequency
+    )
 
     function handlePillAdd(time, pillName) {
         if ([paracetamolKey, NSAIDKey].includes(pillName)) {
