@@ -27,7 +27,6 @@ export const HomeScreen = (props: Props) => {
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            {console.log("redrawn with state:", state)}
             <Text>
                 Home Screen
             </Text>
