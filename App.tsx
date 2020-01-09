@@ -24,9 +24,6 @@ const uiTheme = {
 const AppNavigator = createStackNavigator({
   Home: {
     screen: HomeScreen,
-  },
-  EditAdministration: {
-    screen: EditAdministrationScreen
   }
 });
 
