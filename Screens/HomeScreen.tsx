@@ -1,5 +1,4 @@
 import React from 'react';
-import { useInterval } from '../Functions/useInterval';
 import { addAdministration, AppContext, updateClock } from '../Context/Context';
 
 import { ActionButtonFixShadowRadiusNANBug as ActionButton } from '../Components/ActionButtonFixShadowRadiusNANBug';
@@ -19,20 +18,6 @@ export const HomeScreen = (props: Props) => {
     const { time, administrations } = state;
     const paracetamolKey = 'Paracetamol';
     const NSAIDKey = 'NSAID';
-    const clockUpdateFrequency = 5000;
-    const clockResolution = 15000;
-
-    useInterval(() => {
-        dispatch(
-            updateClock(
-                new Date(
-                    Math.floor(new Date().getTime() / clockResolution) * clockResolution
-                )
-            ))
-
-    }
-        , clockUpdateFrequency
-    )
 
     function handlePillAdd(time, pillName) {
         if ([paracetamolKey, NSAIDKey].includes(pillName)) {

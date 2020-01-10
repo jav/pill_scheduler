@@ -1,11 +1,13 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useMemo } from 'react';
+import { useInterval } from './Functions/useInterval';
 
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import { AppContextProvider, reducer, initialState, updateClock } from './Context/Context'
 
-import { HomeScreen } from './Screens/HomeScreen'
+import { HomeScreen } from './Screens/HomeScreen';
+import { EditTimeScreen } from './Screens/EditTimeScreen';
 
 import { COLOR, ThemeContext, getTheme } from 'react-native-material-ui';
 
@@ -21,11 +23,19 @@ const uiTheme = {
   },
 };
 
-const AppNavigator = createStackNavigator({
-  Home: {
-    screen: HomeScreen,
+const AppNavigator = createStackNavigator(
+  {
+    Home: {
+      screen: HomeScreen,
+    },
+    EditTime: {
+      screen: EditTimeScreen
+    }
+  },
+  {
+    initialRouteName: 'Home',
   }
-});
+);
 
 
 const AppContainer = createAppContainer(AppNavigator);
@@ -33,6 +43,24 @@ const AppContainer = createAppContainer(AppNavigator);
 
 export default () => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
+
+
+  const clockUpdateFrequency = 5000;
+  const clockResolution = 15000;
+
+  useInterval(() => {
+    if (state.realtimeClockMode) {
+      dispatch(
+        updateClock(
+          new Date(
+            Math.floor(new Date().getTime() / clockResolution) * clockResolution
+          )
+        ))
+    }
+
+  }
+    , clockUpdateFrequency
+  )
 
   // According to article (https://hswolff.com/blog/how-to-usecontext-with-usereducer/), passing in
   // value={state, dispatch} in AppContext.Provider create a new object if App is rerendered, triggering
