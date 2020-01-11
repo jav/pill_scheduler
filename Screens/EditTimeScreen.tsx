@@ -6,7 +6,7 @@ import { AppContext, setRealtimeClockMode, updateClock } from '../Context/Contex
 import { CurrentTime } from '../Components/CurrentTime';
 
 import { Text, View, Switch, Button, Platform } from 'react-native';
-import DateTimePicker ,{IOSNativeProps, AndroidNativeProps} from '@react-native-community/datetimepicker';
+import DateTimePicker, { IOSNativeProps, AndroidNativeProps } from '@react-native-community/datetimepicker';
 
 interface Props {
     navigation: NavigationStackProp<{}>;
@@ -17,10 +17,10 @@ export const EditTimeScreen = (props: Props) => {
 
     const { time } = state;
 
-    const [mode, setMode] = useState<IOSNativeProps['mode']| AndroidNativeProps['mode']>('date');
+    const [mode, setMode] = useState<IOSNativeProps['mode'] | AndroidNativeProps['mode']>('date');
     const [show, setShow] = useState(false);
 
-    const showPicker = (timeOrDate: IOSNativeProps['mode']| AndroidNativeProps['mode']) => {
+    const showPicker = (timeOrDate: IOSNativeProps['mode'] | AndroidNativeProps['mode']) => {
         setMode(timeOrDate);
         setShow(true); // possible race condition? I'm betting on that setShow() never executes noticably before setMode()
     }
