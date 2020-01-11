@@ -4,9 +4,10 @@ import { useInterval } from './Functions/useInterval';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-import { AppContextProvider, reducer, initialState, updateClock } from './Context/Context'
+import { AppContextProvider, reducer, initialState, updateClock } from './Context/Context';
 
 import { HomeScreen } from './Screens/HomeScreen';
+import { DateTimePickerScreen } from './Screens/DateTimePickerScreen';
 import { EditTimeScreen } from './Screens/EditTimeScreen';
 
 import { COLOR, ThemeContext, getTheme } from 'react-native-material-ui';
@@ -23,7 +24,7 @@ const uiTheme = {
   },
 };
 
-const AppNavigator = createStackNavigator(
+const MainStackNavigator = createStackNavigator(
   {
     Home: {
       screen: HomeScreen,
@@ -37,8 +38,23 @@ const AppNavigator = createStackNavigator(
   }
 );
 
+// Added for e.g modal screens
+const RootStackNavigator = createStackNavigator(
+  {
+    Main: {
+      screen: MainStackNavigator,
+    },
+    MyModal: {
+      screen: DateTimePickerScreen,
+    },
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+  }
+);
 
-const AppContainer = createAppContainer(AppNavigator);
+const AppContainer = createAppContainer(RootStackNavigator);
 
 
 export default () => {

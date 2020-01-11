@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { NavigationStackProp } from 'react-navigation-stack';
+
 import { AppContext, setRealtimeClockMode, updateClock } from '../Context/Context';
 
 import { CurrentTime } from '../Components/CurrentTime';
@@ -6,7 +8,9 @@ import { CurrentTime } from '../Components/CurrentTime';
 import { Text, View, Switch, Button, Platform } from 'react-native';
 import DateTimePicker ,{IOSNativeProps, AndroidNativeProps} from '@react-native-community/datetimepicker';
 
-interface Props { }
+interface Props {
+    navigation: NavigationStackProp<{}>;
+}
 
 export const EditTimeScreen = (props: Props) => {
     const { state, dispatch } = React.useContext(AppContext);
@@ -37,10 +41,10 @@ export const EditTimeScreen = (props: Props) => {
 
             <View>
                 <View>
-                    <Button onPress={() => showPicker('date')} title="Show date picker!" />
+                    <Button onPress={() => props.navigation.navigate('MyModal')} title="Show date picker!" />
                 </View>
                 <View>
-                    <Button onPress={() => showPicker('time')} title="Show time picker!" />
+                    <Button onPress={() => props.navigation.navigate('MyModal')} title="Show time picker!" />
                 </View>
                 {show && <DateTimePicker value={time}
                     mode={mode}
@@ -54,17 +58,3 @@ export const EditTimeScreen = (props: Props) => {
         </View>
     );
 }
-
-class ModalScreen extends React.Component {
-    render() {
-      return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ fontSize: 30 }}>This is a modal!</Text>
-          <Button
-            onPress={() => this.props.navigation.goBack()}
-            title="Dismiss"
-          />
-        </View>
-      );
-    }
-  }
