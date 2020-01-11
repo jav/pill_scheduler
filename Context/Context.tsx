@@ -90,10 +90,12 @@ export const reducer = (state: IContext, action: ActionType) => {
                 time: payload.time
             }
         case ADD_ADMINISTRATION:
+            const newAdministrationsList = [new Administration(payload.time, payload.pillName), ...state.administrations].sort(
+                (a: Administration, b: Administration) => b.time.getTime() - a.time.getTime()
+            )
             return {
                 ...state,
-                administrations:
-                    [...state.administrations, new Administration(payload.time, payload.pillName)]
+                administrations: newAdministrationsList
             }
                 ;
         default:
