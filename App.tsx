@@ -1,11 +1,14 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useMemo } from 'react';
+import { useInterval } from './Functions/useInterval';
 
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-import { AppContextProvider, reducer, initialState, updateClock } from './Context/Context'
+import { AppContextProvider, reducer, initialState, updateClock } from './Context/Context';
 
-import { HomeScreen } from './Screens/HomeScreen'
+import { HomeScreen } from './Screens/HomeScreen';
+import { DateTimePickerScreen } from './Screens/DateTimePickerScreen';
+import { EditTimeScreen } from './Screens/EditTimeScreen';
 
 import { COLOR, ThemeContext, getTheme } from 'react-native-material-ui';
 
@@ -21,21 +24,59 @@ const uiTheme = {
   },
 };
 
-const AppNavigator = createStackNavigator({
-  Home: {
-    screen: HomeScreen,
+const MainStackNavigator = createStackNavigator(
+  {
+    Home: {
+      screen: HomeScreen,
+    },
+    EditTime: {
+      screen: EditTimeScreen
+    }
   },
-  EditAdministration: {
-    screen: EditAdministrationScreen
+  {
+    initialRouteName: 'Home',
   }
-});
+);
 
+// Added for e.g modal screens
+const RootStackNavigator = createStackNavigator(
+  {
+    Main: {
+      screen: MainStackNavigator,
+    },
+    MyModal: {
+      screen: DateTimePickerScreen,
+    },
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+  }
+);
 
-const AppContainer = createAppContainer(AppNavigator);
+const AppContainer = createAppContainer(RootStackNavigator);
 
 
 export default () => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
+
+
+  const clockUpdateFrequency = 5000;
+  const clockResolution = 15000;
+
+  useInterval(() => {
+    if (state.realtimeClockMode) {
+      dispatch(
+        updateClock(
+          new Date(
+            Math.floor(new Date().getTime() / clockResolution) * clockResolution
+          )
+        ))
+    }
+
+  }
+    , clockUpdateFrequency
+  )
 
   // According to article (https://hswolff.com/blog/how-to-usecontext-with-usereducer/), passing in
   // value={state, dispatch} in AppContext.Provider create a new object if App is rerendered, triggering

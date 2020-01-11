@@ -1,16 +1,18 @@
 import React from 'react';
-import { useInterval } from '../Functions/useInterval';
 import { addAdministration, AppContext, updateClock } from '../Context/Context';
+import { NavigationStackProp } from 'react-navigation-stack';
 
 import { ActionButtonFixShadowRadiusNANBug as ActionButton } from '../Components/ActionButtonFixShadowRadiusNANBug';
 import { AdministrationHistoryView } from '../Components/AdministrationHistoryView';
 import { CurrentTime } from '../Components/CurrentTime';
 
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-interface Props { }
+interface Props {
+    navigation: NavigationStackProp<{}>;
+}
 
 
 export const HomeScreen = (props: Props) => {
@@ -19,20 +21,6 @@ export const HomeScreen = (props: Props) => {
     const { time, administrations } = state;
     const paracetamolKey = 'Paracetamol';
     const NSAIDKey = 'NSAID';
-    const clockUpdateFrequency = 5000;
-    const clockResolution = 15000;
-
-    useInterval(() => {
-        dispatch(
-            updateClock(
-                new Date(
-                    Math.floor(new Date().getTime() / clockResolution) * clockResolution
-                )
-            ))
-
-    }
-        , clockUpdateFrequency
-    )
 
     function handlePillAdd(time, pillName) {
         if ([paracetamolKey, NSAIDKey].includes(pillName)) {
@@ -45,7 +33,9 @@ export const HomeScreen = (props: Props) => {
             <Text>
                 Home Screen
             </Text>
-            <CurrentTime currentTime={time} />
+            <TouchableOpacity onPress={() => props.navigation.navigate('EditTime')} >
+                <CurrentTime currentTime={time} />
+            </TouchableOpacity>
             <AdministrationHistoryView administrationList={administrations} currentTime={time} />
             <ActionButton onPress={(pillName) => handlePillAdd(time, pillName)}
                 actions={

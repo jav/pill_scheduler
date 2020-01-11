@@ -5,13 +5,15 @@ import Administration from '../Types/Administration'
 export interface IContext {
     administrations: Administration[],
     error: string | null,
-    time: Date
+    time: Date,
+    realtimeClockMode: boolean
 };
 
 export const initialState: IContext = {
     administrations: [],
     error: null,
-    time: new Date()
+    time: new Date(),
+    realtimeClockMode: true
 };
 
 interface ContextType {
@@ -29,7 +31,19 @@ export const AppContextConsumer = context.Consumer;
 export const AppContext = context;
 
 
-export type ActionType = ActionUpdateClock | ActionAddAdministration;
+export type ActionType = ActionSetRealtimeClockMode | ActionUpdateClock | ActionAddAdministration;
+
+export const SET_REALTIMECLOCK_MODE = "SET_REALTIMECLOCK_MODE";
+export interface ActionSetRealtimeClockMode {
+    type: typeof SET_REALTIMECLOCK_MODE
+    payload: { mode: boolean }
+}
+export const setRealtimeClockMode = (mode: boolean): ActionSetRealtimeClockMode => {
+    return {
+        type: SET_REALTIMECLOCK_MODE,
+        payload: { mode: mode }
+    }
+}
 
 export const UPDATE_CLOCK = "UPDATE_CLOCK";
 export interface ActionUpdateClock {
@@ -65,6 +79,11 @@ export const reducer = (state: IContext, action: ActionType) => {
     const payload = action.payload;
 
     switch (type) {
+        case SET_REALTIMECLOCK_MODE:
+            return {
+                ...state,
+                realtimeClockMode: payload.mode
+            }
         case UPDATE_CLOCK:
             return {
                 ...state,
