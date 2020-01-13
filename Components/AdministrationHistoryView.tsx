@@ -17,13 +17,12 @@ export const AdministrationHistoryView = (props: AdministrationHistoryViewPropsP
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             {
                 props.administrationList.length > 0 ?
-                    <React.Fragment>
-                        {props.administrationList
-                            .filter((e) => moment(e.time).diff(moment(props.currentTime), 'hours') < 24)
-                            .map((e, i) => (
-                                <Text>{e.pill} : {moment(e.time).from(props.currentTime)}</Text>
-                            ))}
-                    </React.Fragment> :
+                    props.administrationList
+                        .filter((e) => moment(e.time).diff(moment(props.currentTime), 'hours') <= 24)
+                        .map((e, i) => (
+                                <Text key={i}>{e.pill} : {moment(e.time).from(props.currentTime)}</Text>
+                        ))
+                    :
                     <Text>List is empty</Text>}
         </View>
     );
