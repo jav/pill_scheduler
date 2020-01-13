@@ -33,9 +33,3 @@ interface AdministrationHistoryViewEntryProps {
     administration: Administration
     currentTime: Date
 }
-
-const AdministrationEntry = (props: AdministrationHistoryViewEntryProps) => {
-    return (
-        <Text> time : </Text>
-    )
-}
