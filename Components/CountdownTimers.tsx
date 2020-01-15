@@ -24,8 +24,20 @@ export const CountdownTimers = (props: CountdownTimersProps) => {
         }
     }
 
+    const progressToNextPill = (administrationList, currentTime) => {
+        const timeDiff = moment.duration(moment(nextParacetamol(administrationList, currentTime)).diff(currentTime)).asHours();
+
+        if(timeDiff < 0)
+            return 0;
+        if(timeDiff > 4)
+            return 1;
+        return timeDiff/4;
+
+    }
+
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <ProgressBar progress={progressToNextPill(props.administrationList, props.currentTime)} width={200} />
             <Text>{
                 displayNextParacetamol(props.administrationList, props.currentTime)
             }</Text>
