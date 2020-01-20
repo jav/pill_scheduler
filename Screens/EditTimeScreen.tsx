@@ -1,6 +1,5 @@
 import React from 'react';
 import { NavigationStackProp } from 'react-navigation-stack';
-
 import { AppContext, setRealtimeClockMode } from '../Context/Context';
 
 import { CurrentTime } from '../Components/CurrentTime';
@@ -26,8 +25,8 @@ export const EditTimeScreen = (props: Props) => {
                 <Text>Realtime mode </Text>
                 <Switch onValueChange={e => dispatch(setRealtimeClockMode(e))} value={state.realtimeClockMode} />
             </View>
-            <Button onPress={() => props.navigation.navigate('MyModal', { mode: 'date' })} title="Show date picker!" />
-            <Button onPress={() => props.navigation.navigate('MyModal', { mode: 'time' })} title="Show time picker!" />
+            <Button onPress={() => props.navigation.navigate('DateTimePickerModal', { mode: 'date' })} title="Show date picker!" />
+            <Button onPress={() => props.navigation.navigate('DateTimePickerModal', { mode: 'time' })} title="Show time picker!" />
         </View>
     );
 }

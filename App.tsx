@@ -44,7 +44,7 @@ const RootStackNavigator = createStackNavigator(
     Main: {
       screen: MainStackNavigator,
     },
-    MyModal: {
+    DateTimePickerModal: {
       screen: DateTimePickerScreen,
     },
   },
