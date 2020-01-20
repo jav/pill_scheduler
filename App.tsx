@@ -9,6 +9,7 @@ import { AppContextProvider, reducer, initialState, updateClock } from './Contex
 import { HomeScreen } from './Screens/HomeScreen';
 import { DateTimePickerScreen } from './Screens/DateTimePickerScreen';
 import { EditTimeScreen } from './Screens/EditTimeScreen';
+import { NSAIDPickerScreen } from './Screens/NSAIDPickerScreen';
 
 import { COLOR, ThemeContext, getTheme } from 'react-native-material-ui';
 
@@ -47,6 +48,9 @@ const RootStackNavigator = createStackNavigator(
     DateTimePickerModal: {
       screen: DateTimePickerScreen,
     },
+    PickNSAIDModal: {
+      screen: NSAIDPickerScreen,
+    }
   },
   {
     mode: 'modal',

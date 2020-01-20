@@ -23,8 +23,11 @@ export const HomeScreen = (props: Props) => {
     const NSAIDKey = 'NSAID';
 
     function handlePillAdd(time, pillName) {
-        if ([paracetamolKey, NSAIDKey].includes(pillName)) {
+        if (pillName === paracetamolKey) {
             dispatch(addAdministration(time, pillName));
+        }
+        if (pillName === NSAIDKey) {
+            props.navigation.navigate('PickNSAIDModal');
         }
     }
 

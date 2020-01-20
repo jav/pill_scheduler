@@ -24,6 +24,15 @@ export const CountdownTimers = (props: CountdownTimersProps) => {
         }
     }
 
+    const displayNextNSAID = (administrationList, currentTime) => {
+        if (administrationList < currentTime) {
+            return "Now";
+        }
+        else {
+            return moment(nextNSAID(administrationList, currentTime)).from(currentTime);
+        }
+    }
+
     const progressToNextPill = (administrationList, currentTime) => {
         const timeDiff = moment.duration(moment(nextParacetamol(administrationList, currentTime)).diff(currentTime)).asHours();
 
@@ -37,6 +46,10 @@ export const CountdownTimers = (props: CountdownTimersProps) => {
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <ProgressBar progress={progressToNextPill(props.administrationList, props.currentTime)} width={200} />
+            <Text>{
+                displayNextParacetamol(props.administrationList, props.currentTime)
+            }</Text>
             <ProgressBar progress={progressToNextPill(props.administrationList, props.currentTime)} width={200} />
             <Text>{
                 displayNextParacetamol(props.administrationList, props.currentTime)
