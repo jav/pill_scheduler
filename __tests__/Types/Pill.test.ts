@@ -14,7 +14,7 @@ describe('Pill ', () => {
   });
   it('isNSAID() returns false on PARACETAMOL', () => {
     const pill = new Pill("name", Substance.PARACETAMOL);
-    expect(pill.isParacetamol()).toEqual(false);
+    expect(pill.isNSAID()).toEqual(false);
   });
   it('isNSAID() returns true on IBUPROFEN', () => {
     const pill = new Pill("name", Substance.IBUPROFEN);
