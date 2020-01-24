@@ -1,17 +1,17 @@
-enum Substance {
+export enum Substance {
     ACETYLICACID,
     DIKLOFENAK,
     IBUPROFEN,
     PARACETAMOL
 }
 
-class Pill {
+export class Pill {
     pillName: string;
     activeSubstance: Substance;
 
     constructor(pill: string, activeSubstance: Substance) {
         this.pillName = pill;
-        this.activeSubstance
+        this.activeSubstance = activeSubstance;
     }
 
     isParacetamol = () => {
@@ -22,5 +22,3 @@ class Pill {
         return this.activeSubstance !== Substance.PARACETAMOL
     }
 }
-
-export default Pill;
