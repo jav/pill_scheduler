@@ -34,6 +34,19 @@ class AdministrationList {
             )
         );
     }
+
+    onlyNSAID() {
+        return new AdministrationList(
+            this.administrationList.filter((a)=>a.pill.isNSAID())
+        )
+    }
+
+    onlyParacetamol() {
+        return new AdministrationList(
+            this.administrationList.filter((a)=>a.pill.isParacetamol())
+        )
+    }
+
 }
 
 export default AdministrationList;
