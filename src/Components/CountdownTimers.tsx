@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Administration from '../Types/Administration';
+import AdministrationList from '../Types/AdministrationList';
 import { nextParacetamol } from '../Functions/nextPill';
 import moment from 'moment'
 
@@ -9,14 +10,14 @@ import ProgressBar from 'react-native-progress/Bar';
 import { Text, View } from 'react-native';
 
 interface CountdownTimersProps {
-    administrationList: Administration[]
+    administrationList: AdministrationList
     currentTime: Date
 }
 
 export const CountdownTimers = (props: CountdownTimersProps) => {
 
-    const displayNextParacetamol = (administrationList, currentTime) => {
-        if (administrationList < currentTime) {
+    const displayNextParacetamol = (administrationList: AdministrationList, currentTime: Date) => {
+        if (administrationList.getInterval(moment(currentTime).subtract(24,'hours').toDate(), currentTime).length() < 0) {
             return "Now";
         }
         else {

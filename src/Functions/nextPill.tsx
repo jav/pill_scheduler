@@ -1,20 +1,18 @@
 import Administration from '../Types/Administration';
+import AdministrationList from '../Types/AdministrationList';
 
 import moment from 'moment'
 
-export const nextParacetamol = (paracetamolList: Administration[], currentTime: Date) => {
+export const nextParacetamol = (paracetamolList: AdministrationList, currentTime: Date) => {
     /*
     Paracetamol
     Maximum 4g per 24h
     Maximum 1g per 4h
     */
 
-    const last24hList = paracetamolList
-        .filter((a) => a.pill.isParacetamol())
-        .filter((a) => a.time)
-        .filter((a) => moment(a.time).diff(moment(currentTime), 'hours') <= 24);
+    const last24hList = paracetamolList.onlyParacetamol().getInterval(moment(currentTime).subtract(24, 'hours').toDate(), currentTime)
 
-    if (last24hList.length === 0) return moment(0).toDate();
+    if (last24hList.length() === 0) return moment(0).toDate();
 
     const totalmg = last24hList.reduce((acc, a) => acc + 500, 0);
 

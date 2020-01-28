@@ -1,16 +1,17 @@
 import React from "react";
 
 import Administration from '../Types/Administration'
+import AdministrationList from "../Types/AdministrationList";
 
 export interface IContext {
-    administrations: Administration[],
+    administrationList: AdministrationList,
     error: string | null,
     time: Date,
     realtimeClockMode: boolean
 };
 
 export const initialState: IContext = {
-    administrations: [],
+    administrationList: new AdministrationList([]),
     error: null,
     time: new Date(),
     realtimeClockMode: true
@@ -90,7 +91,7 @@ export const reducer = (state: IContext, action: ActionType) => {
                 time: payload.time
             }
         case ADD_ADMINISTRATION:
-            const newAdministrationsList = [new Administration(payload.time, payload.pillName), ...state.administrations].sort(
+            const newAdministrationsList = [new Administration(payload.time, payload.pillName), ...state.administrationList].sort(
                 (a: Administration, b: Administration) => b.time.getTime() - a.time.getTime()
             )
             return {

@@ -18,7 +18,7 @@ interface Props {
 export const HomeScreen = (props: Props) => {
     const { state, dispatch } = React.useContext(AppContext);
 
-    const { time, administrations } = state;
+    const { time, administrationList: administrations } = state;
     const paracetamolKey = 'Paracetamol';
     const NSAIDKey = 'NSAID';
 
