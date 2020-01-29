@@ -1,6 +1,8 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
+import moment from 'moment';
+
 import Administration from '../../src/Types/Administration';
 import { Pill, Substance } from '../../src/Types/Pill';
 import { exportAllDeclaration } from '@babel/types';
@@ -33,6 +35,7 @@ describe('AdministrationList', () => {
     let admListSingleAdm = new AdministrationList([admC]);
     expect(admList.getInterval(timeSix, timeTwelve)).toEqual(admListSingleAdm);
     expect(admList.getInterval(timeTwelve, timeSix)).toEqual(admListSingleAdm);
+    expect(admList.getInterval(moment(timeTwelve), moment(timeSix))).toEqual(admListSingleAdm);
   });
 
   it('onlyNSAID()', () => {
