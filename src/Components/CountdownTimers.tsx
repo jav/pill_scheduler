@@ -17,7 +17,7 @@ interface CountdownTimersProps {
 export const CountdownTimers = (props: CountdownTimersProps) => {
 
     const displayNextParacetamol = (administrationList: AdministrationList, currentTime: Date) => {
-        if (administrationList.getInterval(moment(currentTime).subtract(24,'hours').toDate(), currentTime).length() < 0) {
+        if (administrationList.getInterval(moment(currentTime).subtract(24,'hours').toDate(), currentTime).length() <= 0) {
             return "Now";
         }
         else {
