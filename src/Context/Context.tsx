@@ -13,7 +13,7 @@ export interface IContext {
 export const initialState: IContext = {
     administrationList: new AdministrationList([]),
     error: null,
-    time: new Date(),
+    time: roundTime(new Date(), 15000),
     realtimeClockMode: true
 };
 

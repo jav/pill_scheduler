@@ -10,6 +10,7 @@ import { HomeScreen } from './Screens/HomeScreen';
 import { DateTimePickerScreen } from './Screens/DateTimePickerScreen';
 import { EditTimeScreen } from './Screens/EditTimeScreen';
 import { NSAIDPickerScreen } from './Screens/NSAIDPickerScreen';
+import { roundTime } from './Functions/roundTime';
 
 import { COLOR, ThemeContext, getTheme } from 'react-native-material-ui';
 
@@ -72,12 +73,10 @@ export default () => {
     if (state.realtimeClockMode) {
       dispatch(
         updateClock(
-          new Date(
-            Math.floor(new Date().getTime() / clockResolution) * clockResolution
-          )
-        ))
+          roundTime(new Date(), clockResolution)
+        )
+      );
     }
-
   }
     , clockUpdateFrequency
   )
