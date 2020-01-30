@@ -1,13 +1,13 @@
 import React from 'react';
 
-import Administration from '../Types/Administration';
+import AdministrationList from '../Types/AdministrationList';
 
 import moment from 'moment'
 
 import { Text, View } from 'react-native';
 
 interface AdministrationHistoryViewPropsProps {
-    administrationList: Administration[]
+    administrationList: AdministrationList
     currentTime: Date
 }
 
@@ -16,11 +16,11 @@ export const AdministrationHistoryView = (props: AdministrationHistoryViewPropsP
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             {
-                props.administrationList.length > 0 ?
-                    props.administrationList
+                props.administrationList.length() > 0 ?
+                    props.administrationList.administrationList
                         .filter((e) => moment(e.time).diff(moment(props.currentTime), 'hours') <= 24)
                         .map((e, i) => (
-                                <Text key={i}>{e.pill} : {moment(e.time).from(props.currentTime)}</Text>
+                                <Text key={i}>{e.pill.pillName} : {moment(e.time).from(props.currentTime)}</Text>
                         ))
                     :
                     <Text>List is empty</Text>}

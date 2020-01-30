@@ -29,6 +29,15 @@ const admE = new Administration(timeTwentyFour, pillE);
 
 
 describe('AdministrationList', () => {
+  it('add', () => { 
+    let admList = new AdministrationList();
+    expect(admList.length()).toEqual(0);
+    admList.addAdministration(admA);
+    expect(admList.length()).toEqual(1);
+    admList.addAdministration(admB);
+    expect(admList.length()).toEqual(2);
+  })
+
   it('getInterval()', () => {
     let admList = new AdministrationList([admA, admB, admC, admD, admE]);
     expect(admList.getInterval(timeSix, timeTwelve).length()).toEqual(1);

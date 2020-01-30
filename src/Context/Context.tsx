@@ -1,7 +1,9 @@
 import React from "react";
 
-import Administration from '../Types/Administration'
+import { Pill } from '../Types/Pill';
+import Administration from '../Types/Administration';
 import AdministrationList from "../Types/AdministrationList";
+import { roundTime } from '../Functions/roundTime';
 
 export interface IContext {
     administrationList: AdministrationList,
@@ -65,13 +67,14 @@ export interface ActionAddAdministration {
     type: typeof ADD_ADMINISTRATION
     payload: {
         time: Date,
-        pillName: string
+        pill: Pill,
+        dose: number
     }
 }
-export const addAdministration = (time: Date, pillName: string): ActionAddAdministration => {
+export const addAdministration = (time: Date, pill: Pill, dose: number): ActionAddAdministration => {
     return {
         type: ADD_ADMINISTRATION,
-        payload: { time: time, pillName: pillName }
+        payload: { time: time, pill: pill, dose: dose }
     }
 }
 
@@ -91,9 +94,8 @@ export const reducer = (state: IContext, action: ActionType) => {
                 time: payload.time
             }
         case ADD_ADMINISTRATION:
-            const newAdministrationsList = [new Administration(payload.time, payload.pillName), ...state.administrationList].sort(
-                (a: Administration, b: Administration) => b.time.getTime() - a.time.getTime()
-            )
+            const adm = new Administration(payload.time, payload.pill, payload.dose);
+            const newAdministrationsList = new AdministrationList(state.administrationList).addAdministration(adm);
             return {
                 ...state,
                 administrations: newAdministrationsList

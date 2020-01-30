@@ -9,6 +9,7 @@ import { CountdownTimers } from '../Components/CountdownTimers';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Pill, Substance } from '../Types/Pill';
 
 interface Props {
     navigation: NavigationStackProp<{}>;
@@ -22,9 +23,9 @@ export const HomeScreen = (props: Props) => {
     const paracetamolKey = 'Paracetamol';
     const NSAIDKey = 'NSAID';
 
-    function handlePillAdd(time, pillName) {
+    function handlePillAdd(time: Date, pillName: string) {
         if (pillName === paracetamolKey) {
-            dispatch(addAdministration(time, pillName));
+            dispatch(addAdministration(time, new Pill('generic', Substance.PARACETAMOL), 500));
         }
         if (pillName === NSAIDKey) {
             props.navigation.navigate('PickNSAIDModal');
