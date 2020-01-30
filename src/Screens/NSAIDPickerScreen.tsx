@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Text, View, Button, Picker } from 'react-native';
 
 interface Props {
-    navigation: NavigationStackProp<{}>;
+    navigation: NavigationStackProp<{ addNSAID: (a: string) => {} }>;
 }
 
 const NSAIDList = [
@@ -17,7 +17,6 @@ const NSAIDList = [
 
 
 export const NSAIDPickerScreen = (props: Props) => {
-    const { state, dispatch } = React.useContext(AppContext);
     const [pill, setPill] = React.useState(NSAIDList[0]);
 
     return (
@@ -28,19 +27,19 @@ export const NSAIDPickerScreen = (props: Props) => {
             <View style={{ alignSelf: "stretch" }} >
                 <Picker
                     selectedValue={pill}
-                    onValueChange={(itemValue, itemIndex) =>
-                        {setPill(itemValue)
-                        console.log(`setPill(${itemValue})`)}
+                    onValueChange={(itemValue, itemIndex) => {
+                        setPill(itemValue)
+                    }
                     }>
-                    {NSAIDList.map((pillName, i) => {
-                        console.log(pillName);
-                        return <Picker.Item key={i} label={pillName} value={pillName} />
-                    })}
+                    {NSAIDList.map((pillName, i) => (<Picker.Item key={i} label={pillName} value={pillName} />))}
                 </Picker>
             </View>
             <Button
                 onPress={() => {
-                    dispatch(addAdministration(moment().toDate(), pill));
+                    const addNSAID = props.navigation.getParam('addNSAID', (a: string) => { });
+                    props.navigation.state.params.addNSAID(
+                        pill
+                    )
                     props.navigation.goBack()
                 }}
                 title="OK"

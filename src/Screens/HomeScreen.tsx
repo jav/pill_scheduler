@@ -25,10 +25,32 @@ export const HomeScreen = (props: Props) => {
 
     function handlePillAdd(time: Date, pillName: string) {
         if (pillName === paracetamolKey) {
-            dispatch(addAdministration(time, new Pill('generic', Substance.PARACETAMOL), 500));
+            dispatch(addAdministration(time, new Pill('paracetamol', Substance.PARACETAMOL), 500));
         }
         if (pillName === NSAIDKey) {
-            props.navigation.navigate('PickNSAIDModal');
+            props.navigation.navigate('PickNSAIDModal', {
+                addNSAID: (pillName: string) => {
+                    let substance: Substance = Substance.IBUPROFEN;
+                    let dose: number = 0;
+                    switch (pillName.toUpperCase()) {
+
+                        case 'ACETYLICACID':
+                            substance = Substance.ACETYLICACID;
+                            dose = 1000;
+                            break;
+                        case 'DIKLOFENAK':
+                            substance = Substance.DIKLOFENAK;
+                            dose = 25;
+                            break;
+                        case 'IBUPROFEN':
+                        default:
+                            substance = Substance.IBUPROFEN;
+                            dose = 400;
+                            break;
+                    }
+                    dispatch(addAdministration(time, new Pill(pillName, substance), dose));
+                }
+            });
         }
     }
 
