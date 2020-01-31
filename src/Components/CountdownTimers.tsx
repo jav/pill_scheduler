@@ -2,12 +2,13 @@ import React from 'react';
 
 import Administration from '../Types/Administration';
 import AdministrationList from '../Types/AdministrationList';
-import { nextParacetamol } from '../Functions/nextPill';
+import { nextParacetamol, nextNSAID } from '../Functions/nextPill';
 import moment from 'moment'
 
 import ProgressBar from 'react-native-progress/Bar';
 
 import { Text, View } from 'react-native';
+import { Substance } from '../Types/Pill';
 
 interface CountdownTimersProps {
     administrationList: AdministrationList
@@ -16,45 +17,52 @@ interface CountdownTimersProps {
 
 export const CountdownTimers = (props: CountdownTimersProps) => {
 
-    const displayNextParacetamol = (administrationList: AdministrationList, currentTime: Date) => {
-        if (administrationList.getInterval(moment(currentTime).subtract(24,'hours').toDate(), currentTime).length() <= 0) {
-            return "Now";
-        }
-        else {
-            return moment(nextParacetamol(administrationList, currentTime)).from(currentTime);
-        }
+    const timeToNextParacetamol = (administrationList: AdministrationList, currentTime: Date): string => {
+        let next = moment(nextParacetamol(administrationList, currentTime));
+        let duration = moment.duration(next.diff(currentTime))
+        if (duration < moment.duration(0))
+            return "Now!";
+        else return duration.humanize();
     }
 
-    const displayNextNSAID = (administrationList, currentTime) => {
-        if (administrationList < currentTime) {
-            return "Now";
-        }
-        else {
-            return moment(nextNSAID(administrationList, currentTime)).from(currentTime);
-        }
+    const timeToNextNSAID = (administrationList: AdministrationList, substance: Substance, currentTime: Date): string => {
+        let next = moment(nextNSAID(administrationList, currentTime)[substance]);
+        let duration = moment.duration(next.diff(currentTime))
+        if (duration < moment.duration(0))
+            return "Now!";
+        else return duration.humanize();
     }
 
-    const progressToNextPill = (administrationList, currentTime) => {
+    const progressToNextParacetamol = (administrationList, currentTime) => {
         const timeDiff = moment.duration(moment(nextParacetamol(administrationList, currentTime)).diff(currentTime)).asHours();
-
-        if(timeDiff < 0)
-            return 0;
-        if(timeDiff > 4)
-            return 1;
-        return timeDiff/4;
-
+        return Math.max(0, Math.min(1, timeDiff / 4));
+    }
+    const progressToNextNSAID = (administrationList, currentTime) => {
+        const nextNSAIDTimes = nextNSAID(administrationList, currentTime);
+        const minTime = Object.keys(nextNSAIDTimes)
+            .map((key) => nextNSAIDTimes[key])
+            .reduce((min, curr) => moment.min(moment(min), moment(curr)).toDate());
+        const timeDiff = moment.duration(moment(minTime).diff(moment(currentTime))).asHours();
+        console.log("timeDiff", timeDiff);
+        return Math.max(0, Math.min(1, timeDiff / 6));
     }
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <ProgressBar progress={progressToNextPill(props.administrationList, props.currentTime)} width={200} />
-            <Text>{
-                displayNextParacetamol(props.administrationList, props.currentTime)
-            }</Text>
-            <ProgressBar progress={progressToNextPill(props.administrationList, props.currentTime)} width={200} />
-            <Text>{
-                displayNextParacetamol(props.administrationList, props.currentTime)
-            }</Text>
+            <ProgressBar progress={progressToNextParacetamol(props.administrationList.onlyParacetamol(), props.currentTime)} width={200} />
+            <Text>
+                {timeToNextParacetamol(props.administrationList, props.currentTime)}
+            </Text>
+            <ProgressBar progress={progressToNextNSAID(props.administrationList.onlyNSAID(), props.currentTime)} width={200} />
+            <Text>
+                Acetylic acid: {timeToNextNSAID(props.administrationList, Substance.ACETYLICACID, props.currentTime)}
+            </Text>
+            <Text>
+                Diklofenak: {timeToNextNSAID(props.administrationList, Substance.DIKLOFENAK, props.currentTime)}
+            </Text>
+            <Text>
+                Ibuprofen: {timeToNextNSAID(props.administrationList, Substance.IBUPROFEN, props.currentTime)}
+            </Text>
         </View>
     );
 }
