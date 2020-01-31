@@ -66,6 +66,12 @@ class AdministrationList {
         )
     }
 
+    filterOnSubstance(substance: Substance) {
+        return new AdministrationList(
+            this.administrationList.filter((a) => a.pill.activeSubstance === substance)
+        );
+    }
+
 }
 
 export default AdministrationList;
