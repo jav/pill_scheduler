@@ -21,7 +21,9 @@ class AdministrationList {
     }
 
     totalMg(substance: Substance) {
-        return this.administrationList.reduce((acc, a) => acc + a.dose, 0);
+        return this.administrationList
+            .filter((a)=>a.pill.activeSubstance === substance)
+            .reduce((acc, a) => acc + a.dose, 0);
 
     }
 
