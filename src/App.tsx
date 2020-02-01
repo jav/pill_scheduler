@@ -10,6 +10,7 @@ import { HomeScreen } from './Screens/HomeScreen';
 import { DateTimePickerScreen } from './Screens/DateTimePickerScreen';
 import { EditTimeScreen } from './Screens/EditTimeScreen';
 import { NSAIDPickerScreen } from './Screens/NSAIDPickerScreen';
+import { DosePickerScreen } from './Screens/DosePickerScreen';
 import { roundTime } from './Functions/roundTime';
 
 import { COLOR, ThemeContext, getTheme } from 'react-native-material-ui';
@@ -51,6 +52,9 @@ const RootStackNavigator = createStackNavigator(
     },
     PickNSAIDModal: {
       screen: NSAIDPickerScreen,
+    },
+    PickDoseModal: {
+      screen: DosePickerScreen,
     }
   },
   {

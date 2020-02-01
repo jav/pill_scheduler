@@ -1,45 +1,41 @@
 import React from 'react';
 import { NavigationStackProp } from 'react-navigation-stack';
-import { AppContext, addAdministration } from '../Context/Context';
-import moment from 'moment';
 
 import { Text, View, Button, Picker } from 'react-native';
 
 interface Props {
-    navigation: NavigationStackProp<{ addNSAID: (a: string) => {} }>
+    navigation: NavigationStackProp<{
+        defaultDose: number,
+        doseList: number[],
+        addDose: (a: number) => {}
+    }>
 }
 
-const NSAIDList = [
-    'ibuprofen',
-    'acetylicacid',
-    'diklofenak',
-]
-
-
-export const NSAIDPickerScreen = (props: Props) => {
-    const [pill, setPill] = React.useState(NSAIDList[0]);
-
+export const DosePickerScreen = (props: Props) => {
+    console.log("navigate to DosePickerScreen");
+    const [dose, setDose] = React.useState(props.navigation.state.params.defaultDose);
+    const doseList = props.navigation.state.params.doseList;
+    console.log("state dose:", dose);
+    console.log("doseList:", doseList);
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Text>
-                Select NSAID
+                Select Dose
             </Text>
             <View style={{ alignSelf: "stretch" }} >
                 <Picker
-                    selectedValue={pill}
+                    selectedValue={dose}
                     onValueChange={(itemValue, itemIndex) => {
-                        setPill(itemValue)
+                        setDose(itemValue)
                     }
                     }>
-                    {NSAIDList.map((pillName, i) => (<Picker.Item key={i} label={pillName} value={pillName} />))}
+                    {doseList.map((d:number, i) => (<Picker.Item key={i} label={String(d)} value={d} />))}
                 </Picker>
             </View>
             <Button
                 onPress={() => {
-                    props.navigation.state.params.addNSAID(
-                        pill
-                    )
-                    props.navigation.goBack()
+                    props.navigation.state.params.pickDose(dose);
+                    props.navigation.goBack();
                 }}
                 title="OK"
             />
