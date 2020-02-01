@@ -43,17 +43,16 @@ export const CountdownTimers = (props: CountdownTimersProps) => {
             .map((key) => nextNSAIDTimes[key])
             .reduce((min, curr) => moment.min(moment(min), moment(curr)).toDate());
         const timeDiff = moment.duration(moment(minTime).diff(moment(currentTime))).asHours();
-        console.log("timeDiff", timeDiff);
         return Math.max(0, Math.min(1, timeDiff / 6));
     }
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <ProgressBar progress={progressToNextParacetamol(props.administrationList.onlyParacetamol(), props.currentTime)} width={200} />
+            <ProgressBar progress={progressToNextParacetamol(props.administrationList, props.currentTime)} width={200} />
             <Text>
-                {timeToNextParacetamol(props.administrationList, props.currentTime)}
+                Paracetamol: {timeToNextParacetamol(props.administrationList, props.currentTime)}
             </Text>
-            <ProgressBar progress={progressToNextNSAID(props.administrationList.onlyNSAID(), props.currentTime)} width={200} />
+            <ProgressBar progress={progressToNextNSAID(props.administrationList, props.currentTime)} width={200} />
             <Text>
                 Acetylic acid: {timeToNextNSAID(props.administrationList, Substance.ACETYLICACID, props.currentTime)}
             </Text>
