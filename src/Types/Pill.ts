@@ -5,13 +5,18 @@ export enum Substance {
     PARACETAMOL
 }
 
-export class Pill {
-    pillName: string;
-    activeSubstance: Substance;
 
-    constructor(pill: string, activeSubstance: Substance) {
-        this.pillName = pill;
-        this.activeSubstance = activeSubstance;
+export class Pill {
+    name: string;
+    activeSubstance: Substance;
+    doseList: number[];
+    defaultDose: number;
+
+    constructor(_inObj: { name: string, substance: Substance, doseList: number[], defaultDose: number }) {
+        this.name = _inObj.name;
+        this.activeSubstance = _inObj.substance;
+        this.doseList = _inObj.doseList;
+        this.defaultDose = _inObj.defaultDose;
     }
 
     isParacetamol = () => {
