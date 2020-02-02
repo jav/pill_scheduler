@@ -8,15 +8,13 @@ interface Props {
         defaultDose: number,
         doseList: number[],
         addDose: (a: number) => {}
+        returnKey?: string
     }>
 }
 
 export const DosePickerScreen = (props: Props) => {
-    console.log("navigate to DosePickerScreen");
     const [dose, setDose] = React.useState(props.navigation.state.params.defaultDose);
     const doseList = props.navigation.state.params.doseList;
-    console.log("state dose:", dose);
-    console.log("doseList:", doseList);
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Text>
@@ -29,13 +27,19 @@ export const DosePickerScreen = (props: Props) => {
                         setDose(itemValue)
                     }
                     }>
-                    {doseList.map((d:number, i) => (<Picker.Item key={i} label={String(d)} value={d} />))}
+                    {doseList.map((d, i) => (<Picker.Item key={i} label={String(d)} value={d} />))}
                 </Picker>
             </View>
             <Button
                 onPress={() => {
                     props.navigation.state.params.pickDose(dose);
-                    props.navigation.goBack();
+                    const returnKey =  props.navigation.state.params.returnKey
+                    if (typeof returnKey === 'undefined') {
+                        props.navigation.goBack();
+                    }
+                    else {
+                        props.navigation.goBack(returnKey);
+                    }
                 }}
                 title="OK"
             />
