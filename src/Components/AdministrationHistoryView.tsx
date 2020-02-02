@@ -20,15 +20,10 @@ export const AdministrationHistoryView = (props: AdministrationHistoryViewPropsP
                     props.administrationList.administrationList
                         .filter((e) => moment(e.time).diff(moment(props.currentTime), 'hours') <= 24)
                         .map((e, i) => (
-                                <Text key={i}>{e.pill.pillName} :{e.dose}mg : {moment(e.time).from(props.currentTime)}</Text>
+                                <Text key={i}>{e.pill.name} :{e.dose}mg : {moment(e.time).from(props.currentTime)}</Text>
                         ))
                     :
                     <Text>List is empty</Text>}
         </View>
     );
-}
-
-interface AdministrationHistoryViewEntryProps {
-    administration: Administration
-    currentTime: Date
 }
