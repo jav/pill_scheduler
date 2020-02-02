@@ -16,7 +16,7 @@ const NSAIDList = pillsDB.getAllNSAID().map((p => p.name));
 
 
 export const NSAIDPickerScreen = (props: Props) => {
-    const [pill, setPill] = React.useState(NSAIDList[0]);
+    const [pillName, setPill] = React.useState(NSAIDList[0]);
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -25,20 +25,26 @@ export const NSAIDPickerScreen = (props: Props) => {
             </Text>
             <View style={{ alignSelf: "stretch" }} >
                 <Picker
-                    selectedValue={pill}
-                    onValueChange={(itemValue, itemIndex) => {
-                        setPill(itemValue)
-                    }
-                    }>
+                    selectedValue={pillName}
+                    onValueChange={(itemValue) => setPill(itemValue)}
+                >
                     {NSAIDList.map((pillName, i) => (<Picker.Item key={i} label={pillName} value={pillName} />))}
                 </Picker>
             </View>
             <Button
                 onPress={() => {
-                    props.navigation.state.params.addNSAID(
-                        pill
-                    )
-                    props.navigation.goBack()
+                    props.navigation.navigate({
+                        routeName: 'PickDoseModal',
+                        params: {
+                            defaultDose: pillsDB.getPill(pillName).defaultDose,
+                            doseList: pillsDB.getPill(pillName).doseList,
+                            pickDose: (_doseMg: number): void => {
+                                const pill = pillsDB.getPill(pillName);
+                                props.navigation.state.params.addNSAID(pill, _doseMg);
+                            },
+                            returnKey: props.navigation.state.params.returnKey
+                        },
+                    });
                 }}
                 title="OK"
             />

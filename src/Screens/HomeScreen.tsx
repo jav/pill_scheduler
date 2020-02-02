@@ -9,7 +9,7 @@ import { CountdownTimers } from '../Components/CountdownTimers';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Pill, Substance } from '../Types/Pill';
+import { Pill, Substance, pillsDB } from '../Types/Pill';
 
 interface Props {
     navigation: NavigationStackProp<{}>;
@@ -23,51 +23,27 @@ export const HomeScreen = (props: Props) => {
     const paracetamolKey = 'Paracetamol';
     const NSAIDKey = 'NSAID';
 
-    function handlePillAdd(time: Date, pillName: string) {
-        let dose = 0;
-        if (pillName === paracetamolKey) {
-            console.log("navigate to PickDoseModal");
+    function handlePillAdd(time: Date, pillKey: string) {
+        if (pillKey === paracetamolKey) {
             props.navigation.navigate('PickDoseModal', {
-                defaultDose:1000,
-                doseList: [250, 325, 500, 650, 750, 1000],
+                defaultDose: pillsDB.getPill('Paracetamol').defaultDose,
+                doseList: pillsDB.getPill('Paracetamol').doseList,
                 pickDose: (_doseMg: number): void => {
-                    dispatch(addAdministration(time, new Pill('paracetamol', Substance.PARACETAMOL), _doseMg));
+                    const pill = pillsDB.getPill('Paracetamol')
+                    dispatch(addAdministration(time, pill, _doseMg));
                 }
             })
         }
-        if (pillName === NSAIDKey) {
-            props.navigation.navigate('PickNSAIDModal', {
-                addNSAID: (pillName: string) => {
-                    let substance: Substance = Substance.IBUPROFEN;
-                    let defaultDose: number = 0;
-                    let doseList = [];
-                    switch (pillName.toUpperCase()) {
-
-                        case 'ACETYLICACID':
-                            substance = Substance.ACETYLICACID;
-                            defaultDose = 1000;
-                            doseList = [250, 500, 750, 1000, 1250, 1500, 1750, 2000];
-                            break;
-                        case 'DIKLOFENAK':
-                            substance = Substance.DIKLOFENAK;
-                            defaultDose = 25,
-                            doseList = [25, 50, 75, 100];
-                            break;
-                        case 'IBUPROFEN':
-                        default:
-                            substance = Substance.IBUPROFEN;
-                            defaultDose = 400;
-                            doseList = [100, 200, 300, 400, 500, 600, 700, 800];
-                            break;
-                    }
-                    props.navigation.navigate('PickDoseModal', {
-                        defaultDose: defaultDose,
-                        doseList: doseList,
-                        pickDose: (_doseMg: number): void => {
-                            dispatch(addAdministration(time, new Pill(pillName, substance), _doseMg));
-                        }
-                    })
-                }
+        if (pillKey === NSAIDKey) {
+            props.navigation.navigate({
+                routeName: 'PickNSAIDModal',
+                params: {
+                    addNSAID: (pill: Pill, dose: number) => {
+                        dispatch(addAdministration(time, pill, dose));
+                    },
+                    returnKey: 'returnNavigationKey'
+                },
+                key: 'returnNavigationKey'
             });
         }
     }
