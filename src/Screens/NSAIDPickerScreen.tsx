@@ -1,19 +1,18 @@
 import React from 'react';
 import { NavigationStackProp } from 'react-navigation-stack';
-import { AppContext, addAdministration } from '../Context/Context';
-import moment from 'moment';
 
+import { pillsDB } from '../Types/Pill';
 import { Text, View, Button, Picker } from 'react-native';
 
 interface Props {
-    navigation: NavigationStackProp<{ addNSAID: (a: string) => {} }>
+    navigation: NavigationStackProp<{
+        addNSAID: (a: Pill) => {},
+        returnKey: string
+    }>
 }
 
-const NSAIDList = [
-    'ibuprofen',
-    'acetylicacid',
-    'diklofenak',
-]
+const NSAIDList = pillsDB.getAllNSAID().map((p => p.name));
+
 
 
 export const NSAIDPickerScreen = (props: Props) => {
