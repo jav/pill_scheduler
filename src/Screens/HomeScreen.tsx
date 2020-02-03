@@ -6,6 +6,7 @@ import { ActionButtonFixShadowRadiusNANBug as ActionButton } from '../Components
 import { AdministrationHistoryView } from '../Components/AdministrationHistoryView';
 import { CurrentTime } from '../Components/CurrentTime';
 import { CountdownTimers } from '../Components/CountdownTimers';
+import { EffectGraph } from '../Components/EffectGraph';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -56,6 +57,7 @@ export const HomeScreen = (props: Props) => {
             <TouchableOpacity onPress={() => props.navigation.navigate('EditTime')} >
                 <CurrentTime currentTime={time} />
             </TouchableOpacity>
+            <EffectGraph administrationList={administrations} currentTime={time} />
             <CountdownTimers administrationList={administrations} currentTime={time} />
             <AdministrationHistoryView administrationList={administrations} currentTime={time} />
             <ActionButton onPress={(pillName) => handlePillAdd(time, pillName)}
