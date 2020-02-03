@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationStackProp } from 'react-navigation-stack';
 
-import { pillsDB } from '../Types/Pill';
+import { Pill, pillsDB } from '../Types/Pill';
 import { Text, View, Button, Picker } from 'react-native';
 
 interface Props {
