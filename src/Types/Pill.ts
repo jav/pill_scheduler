@@ -1,10 +1,4 @@
-export enum Substance {
-    ACETYLICACID,
-    DIKLOFENAK,
-    IBUPROFEN,
-    PARACETAMOL
-}
-
+import {Substance} from './Substance';
 
 export class Pill {
     name: string;
@@ -49,13 +43,13 @@ class PillsDB {
                 name: 'Ibuprofen',
                 substance: Substance.IBUPROFEN,
                 doseList: [100, 200, 300, 400, 500, 600, 700, 800],
-                defaultDose: 400
+                defaultDose: 400,
             }),
             new Pill({
                 name: 'Paracetamol',
                 substance: Substance.PARACETAMOL,
                 doseList: [250, 325, 500, 650, 750, 1000],
-                defaultDose: 1000
+                defaultDose: 1000,
             })
         ]
     }
@@ -68,7 +62,7 @@ class PillsDB {
     }
 
     getAllParacetamol() {
-        return this.pillsDB.filter((p) => p.substance === Substance.PARACETAMOL);
+        return this.pillsDB.filter((p) => p.activeSubstance === Substance.PARACETAMOL);
     }
 
     getAllNSAID() {

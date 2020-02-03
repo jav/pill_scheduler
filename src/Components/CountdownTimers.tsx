@@ -8,7 +8,7 @@ import moment from 'moment'
 import ProgressBar from 'react-native-progress/Bar';
 
 import { Text, View } from 'react-native';
-import { Substance } from '../Types/Pill';
+import { Substance } from '../Types/Substance';
 
 interface CountdownTimersProps {
     administrationList: AdministrationList

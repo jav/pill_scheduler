@@ -1,5 +1,5 @@
 import Administration from './Administration';
-import { Substance } from './Pill';
+import { Substance } from './Substance';
 
 class AdministrationList {
     administrationList: Administration[]

@@ -1,7 +1,7 @@
 import AdministrationList from '../Types/AdministrationList';
 
 import moment from 'moment'
-import { Substance } from '../Types/Pill';
+import { Substance } from '../Types/Substance';
 
 interface NextPillMap {
     [key: string]: Date

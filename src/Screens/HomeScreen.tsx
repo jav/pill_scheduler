@@ -9,7 +9,8 @@ import { CountdownTimers } from '../Components/CountdownTimers';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Pill, Substance, pillsDB } from '../Types/Pill';
+import { Pill, pillsDB } from '../Types/Pill';
+import { Substance } from '../Types/Substance';
 
 interface Props {
     navigation: NavigationStackProp<{}>;
