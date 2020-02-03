@@ -1,12 +1,12 @@
-import {Substance} from './Substance';
+import {SubstanceKey} from './Substance';
 
 export class Pill {
     name: string;
-    activeSubstance: Substance;
+    activeSubstance: SubstanceKey;
     doseList: number[];
     defaultDose: number;
 
-    constructor(_inObj: { name: string, substance: Substance, doseList: number[], defaultDose: number }) {
+    constructor(_inObj: { name: string, substance: SubstanceKey, doseList: number[], defaultDose: number }) {
         this.name = _inObj.name;
         this.activeSubstance = _inObj.substance;
         this.doseList = _inObj.doseList;
@@ -14,11 +14,11 @@ export class Pill {
     }
 
     isParacetamol = () => {
-        return this.activeSubstance === Substance.PARACETAMOL;
+        return this.activeSubstance === SubstanceKey.PARACETAMOL;
     }
 
     isNSAID = () => {
-        return this.activeSubstance !== Substance.PARACETAMOL
+        return this.activeSubstance !== SubstanceKey.PARACETAMOL
     }
 }
 
@@ -29,25 +29,25 @@ class PillsDB {
         this.pillsDB = [
             new Pill({
                 name: 'Acetylicacid',
-                substance: Substance.ACETYLICACID,
+                substance: SubstanceKey.ACETYLICACID,
                 doseList: [250, 500, 750, 1000, 1250, 1500, 1750, 2000],
                 defaultDose: 1000
             }),
             new Pill({
                 name: 'Diklofenak',
-                substance: Substance.DIKLOFENAK,
+                substance: SubstanceKey.DIKLOFENAK,
                 doseList: [25, 50, 75, 100],
                 defaultDose: 25
             }),
             new Pill({
                 name: 'Ibuprofen',
-                substance: Substance.IBUPROFEN,
+                substance: SubstanceKey.IBUPROFEN,
                 doseList: [100, 200, 300, 400, 500, 600, 700, 800],
                 defaultDose: 400,
             }),
             new Pill({
                 name: 'Paracetamol',
-                substance: Substance.PARACETAMOL,
+                substance: SubstanceKey.PARACETAMOL,
                 doseList: [250, 325, 500, 650, 750, 1000],
                 defaultDose: 1000,
             })
@@ -62,16 +62,16 @@ class PillsDB {
     }
 
     getAllParacetamol() {
-        return this.pillsDB.filter((p) => p.activeSubstance === Substance.PARACETAMOL);
+        return this.pillsDB.filter((p) => p.activeSubstance === SubstanceKey.PARACETAMOL);
     }
 
     getAllNSAID() {
         console.log("getAllNSAID() will return: ", this.pillsDB.filter(
-            (p) => [Substance.ACETYLICACID, Substance.DIKLOFENAK, Substance.IBUPROFEN].includes(p.activeSubstance))
+            (p) => [SubstanceKey.ACETYLICACID, SubstanceKey.DIKLOFENAK, SubstanceKey.IBUPROFEN].includes(p.activeSubstance))
         );
         console.log("having filtered the list:", this.pillsDB);
         return this.pillsDB.filter(
-            (p) => [Substance.ACETYLICACID, Substance.DIKLOFENAK, Substance.IBUPROFEN].includes(p.activeSubstance));
+            (p) => [SubstanceKey.ACETYLICACID, SubstanceKey.DIKLOFENAK, SubstanceKey.IBUPROFEN].includes(p.activeSubstance));
     }
 }
 

@@ -1,5 +1,5 @@
 import Administration from './Administration';
-import { Substance } from './Substance';
+import { SubstanceKey } from './Substance';
 
 class AdministrationList {
     administrationList: Administration[]
@@ -20,7 +20,7 @@ class AdministrationList {
         return this.administrationList.length;
     }
 
-    totalMg(substance: Substance) {
+    totalMg(substance: SubstanceKey) {
         return this.administrationList
             .filter((a)=>a.pill.activeSubstance === substance)
             .reduce((acc, a) => acc + a.dose, 0);
@@ -66,7 +66,7 @@ class AdministrationList {
         )
     }
 
-    filterOnSubstance(substance: Substance) {
+    filterOnSubstance(substance: SubstanceKey) {
         return new AdministrationList(
             this.administrationList.filter((a) => a.pill.activeSubstance === substance)
         );

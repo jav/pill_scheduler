@@ -8,7 +8,7 @@ import moment from 'moment'
 import ProgressBar from 'react-native-progress/Bar';
 
 import { Text, View } from 'react-native';
-import { Substance } from '../Types/Substance';
+import { SubstanceKey, substanceDB } from '../Types/Substance';
 
 interface CountdownTimersProps {
     administrationList: AdministrationList
@@ -25,7 +25,7 @@ export const CountdownTimers = (props: CountdownTimersProps) => {
         else return duration.humanize();
     }
 
-    const timeToNextNSAID = (administrationList: AdministrationList, substance: Substance, currentTime: Date): string => {
+    const timeToNextNSAID = (administrationList: AdministrationList, substance: SubstanceKey, currentTime: Date): string => {
         let next = moment(nextNSAID(administrationList, currentTime)[substance]);
         let duration = moment.duration(next.diff(currentTime))
         if (duration < moment.duration(0))
@@ -35,7 +35,7 @@ export const CountdownTimers = (props: CountdownTimersProps) => {
 
     const progressToNextParacetamol = (administrationList, currentTime) => {
         const timeDiff = moment.duration(moment(nextParacetamol(administrationList, currentTime)).diff(currentTime)).asHours();
-        return Math.max(0, Math.min(1, timeDiff / 4));
+        return Math.max(0, Math.min(1, timeDiff / substanceDB.getSubstanceByKey(SubstanceKey.PARACETAMOL).periodicity));
     }
     const progressToNextNSAID = (administrationList, currentTime) => {
         const nextNSAIDTimes = nextNSAID(administrationList, currentTime);
@@ -54,13 +54,13 @@ export const CountdownTimers = (props: CountdownTimersProps) => {
             </Text>
             <ProgressBar progress={progressToNextNSAID(props.administrationList, props.currentTime)} width={200} />
             <Text>
-                Acetylic acid: {timeToNextNSAID(props.administrationList, Substance.ACETYLICACID, props.currentTime)}
+                Acetylic acid: {timeToNextNSAID(props.administrationList, SubstanceKey.ACETYLICACID, props.currentTime)}
             </Text>
             <Text>
-                Diklofenak: {timeToNextNSAID(props.administrationList, Substance.DIKLOFENAK, props.currentTime)}
+                Diklofenak: {timeToNextNSAID(props.administrationList, SubstanceKey.DIKLOFENAK, props.currentTime)}
             </Text>
             <Text>
-                Ibuprofen: {timeToNextNSAID(props.administrationList, Substance.IBUPROFEN, props.currentTime)}
+                Ibuprofen: {timeToNextNSAID(props.administrationList, SubstanceKey.IBUPROFEN, props.currentTime)}
             </Text>
         </View>
     );
