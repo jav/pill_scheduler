@@ -1,5 +1,6 @@
 import React from 'react';
-import { addAdministration, AppContext, updateClock } from '../Context/Context';
+
+import { addAdministration, AppContext } from '../Context/Context';
 import { NavigationStackProp } from 'react-navigation-stack';
 
 import { ActionButtonFixShadowRadiusNANBug as ActionButton } from '../Components/ActionButtonFixShadowRadiusNANBug';
