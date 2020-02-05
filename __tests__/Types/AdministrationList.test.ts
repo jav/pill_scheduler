@@ -29,8 +29,8 @@ const admE = new Administration(timeTwentyFour, pillE);
 
 
 describe('AdministrationList', () => {
-  it('add', () => { 
-    let admList = new AdministrationList();
+  it('add', () => {
+    const admList = new AdministrationList();
     expect(admList.length()).toEqual(0);
     admList.addAdministration(admA);
     expect(admList.length()).toEqual(1);
@@ -39,23 +39,23 @@ describe('AdministrationList', () => {
   })
 
   it('getInterval()', () => {
-    let admList = new AdministrationList([admA, admB, admC, admD, admE]);
+    const admList = new AdministrationList([admA, admB, admC, admD, admE]);
     expect(admList.getInterval(timeSix, timeTwelve).length()).toEqual(1);
-    let admListSingleAdm = new AdministrationList([admC]);
+    const admListSingleAdm = new AdministrationList([admC]);
     expect(admList.getInterval(timeSix, timeTwelve)).toEqual(admListSingleAdm);
     expect(admList.getInterval(timeTwelve, timeSix)).toEqual(admListSingleAdm);
     expect(admList.getInterval(moment(timeTwelve), moment(timeSix))).toEqual(admListSingleAdm);
   });
 
   it('onlyNSAID()', () => {
-    let admList = new AdministrationList([admA, admB, admC, admD, admE]);
-    let admListOnlyNSAID = new AdministrationList([admB, admC, admD]);
+    const admList = new AdministrationList([admA, admB, admC, admD, admE]);
+    const admListOnlyNSAID = new AdministrationList([admB, admC, admD]);
     expect(admList.onlyNSAID()).toEqual(admListOnlyNSAID)
   });
 
   it('onlyParacetamol', () => {
-    let admList = new AdministrationList([admA, admB, admC, admD, admE]);
-    let admListOnlyParacetamol = new AdministrationList([admA, admE]);
+    const admList = new AdministrationList([admA, admB, admC, admD, admE]);
+    const admListOnlyParacetamol = new AdministrationList([admA, admE]);
     expect(admList.onlyParacetamol()).toEqual(admListOnlyParacetamol)
   });
 });
