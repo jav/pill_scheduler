@@ -44,7 +44,6 @@ describe('AdministrationList', () => {
     const admListSingleAdm = new AdministrationList([admC]);
     expect(admList.getInterval(timeSix, timeTwelve)).toEqual(admListSingleAdm);
     expect(admList.getInterval(timeTwelve, timeSix)).toEqual(admListSingleAdm);
-    expect(admList.getInterval(moment(timeTwelve), moment(timeSix))).toEqual(admListSingleAdm);
   });
 
   it('onlyNSAID()', () => {
