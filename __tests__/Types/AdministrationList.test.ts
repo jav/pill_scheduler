@@ -1,31 +1,34 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
+import { describe, it, expect } from 'jest';
+
 import moment from 'moment';
 
 import Administration from '../../src/Types/Administration';
-import { Pill, Substance } from '../../src/Types/Pill';
+import { pillsDB, Pill } from '../../src/Types/Pill';
+import { SubstanceKey } from '../../src/Types/Substance';
 import { exportAllDeclaration } from '@babel/types';
 import AdministrationList from '../../src/Types/AdministrationList';
 
 
-const timeZero = Date.parse('01 Jan 1970 00:00:00 GMT');
-const timeSix = Date.parse('01 Jan 1970 06:00:00 GMT');
-const timeTwelve = Date.parse('01 Jan 1970 12:00:00 GMT');
-const timeEighteen = Date.parse('01 Jan 1970 18:00:00 GMT');
-const timeTwentyFour = Date.parse('02 Jan 1970 00:00:00 GMT');
+const timeZero = new Date('01 Jan 1970 00:00:00 GMT');
+const timeSix = new Date('01 Jan 1970 06:00:00 GMT');
+const timeTwelve = new Date('01 Jan 1970 12:00:00 GMT');
+const timeEighteen = new Date('01 Jan 1970 18:00:00 GMT');
+const timeTwentyFour = new Date('02 Jan 1970 00:00:00 GMT');
 
-const pillA = new Pill("Generic", Substance.PARACETAMOL);
-const pillB = new Pill("Generic", Substance.DIKLOFENAK);
-const pillC = new Pill("Generic", Substance.ACETYLICACID);
-const pillD = new Pill("Generic", Substance.IBUPROFEN);
-const pillE = new Pill("Generic", Substance.PARACETAMOL);
+const pillA = pillsDB.getPill("Paracetamol");
+const pillB = pillsDB.getPill("Diklofenak");
+const pillC = pillsDB.getPill("Acetylicacid");
+const pillD = pillsDB.getPill("Ibuprofen");
+const pillE = pillsDB.getPill("Paracetamol");
 
-const admA = new Administration(timeZero, pillA);
-const admB = new Administration(timeSix, pillB);
-const admC = new Administration(timeTwelve, pillC);
-const admD = new Administration(timeEighteen, pillD);
-const admE = new Administration(timeTwentyFour, pillE);
+const admA = new Administration(timeZero, pillA, 500);
+const admB = new Administration(timeSix, pillB, 50);
+const admC = new Administration(timeTwelve, pillC, 1000);
+const admD = new Administration(timeEighteen, pillD, 400);
+const admE = new Administration(timeTwentyFour, pillE, 500);
 
 
 describe('AdministrationList', () => {
