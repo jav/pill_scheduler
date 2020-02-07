@@ -1,7 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-import {pillsDB, Pill} from '../../src/Types/Pill';
+import { pillsDB, Pill } from '../../src/Types/Pill';
 
 describe('Pill ', () => {
   it('isParacetamol() returns true on PARACETAMOL', () => {
