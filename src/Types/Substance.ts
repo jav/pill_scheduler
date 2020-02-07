@@ -27,7 +27,7 @@ export class Substance {
     }
 
 
-    getEffectAtTime(timeTaken, effectTime) {
+    getEffectAtTime(timeTaken: Date, effectTime: Date) {
         if (effectTime <= timeTaken) return 0;
         const elapsedTimeSinceTaken = moment(effectTime).diff(timeTaken);
         if (elapsedTimeSinceTaken <= this.timeToMaxEffect) {

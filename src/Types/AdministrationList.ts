@@ -1,5 +1,6 @@
+import moment from 'moment';
 import Administration from './Administration';
-import { SubstanceKey } from './Substance';
+import { substanceDB, SubstanceKey } from './Substance';
 
 class AdministrationList {
     administrationList: Administration[]
@@ -22,7 +23,7 @@ class AdministrationList {
 
     totalMg(substance: SubstanceKey) {
         return this.administrationList
-            .filter((a)=>a.pill.activeSubstance === substance)
+            .filter((a) => a.pill.activeSubstance === substance)
             .reduce((acc, a) => acc + a.dose, 0);
 
     }
@@ -71,6 +72,16 @@ class AdministrationList {
             this.administrationList.filter((a) => a.pill.activeSubstance === substance)
         );
     }
+
+    getEffectAtTime(time, category: string): number {
+        if (!['nsaid', 'paracetamol'].includes(category.toLowerCase()))
+            throw Error("getEffectAtTime() category must be either 'NSAID' or 'Paracetamol'.");
+        const filteredList = category.toLowerCase() == 'nsaid' ? this.onlyNSAID() : this.onlyParacetamol();
+        const effectPerAdministrationList = filteredList.administrationList.map((a)=>a.pill.getEffectAtTime(a.time, time));
+        const effectSum = effectPerAdministrationList.reduce((acc, e)=> acc+e);
+        return effectSum;
+    }
+
 
 }
 

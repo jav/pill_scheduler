@@ -1,4 +1,4 @@
-import {SubstanceKey} from './Substance';
+import { SubstanceKey, substanceDB } from './Substance';
 
 export class Pill {
     name: string;
@@ -19,6 +19,10 @@ export class Pill {
 
     isNSAID = () => {
         return this.activeSubstance !== SubstanceKey.PARACETAMOL
+    }
+
+    getEffectAtTime(timeTaken: Date, time: Date): number {
+        return substanceDB.getSubstanceByKey(this.activeSubstance).getEffectAtTime(timeTaken, time);
     }
 }
 

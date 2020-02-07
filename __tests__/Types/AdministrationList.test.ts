@@ -60,4 +60,19 @@ describe('AdministrationList', () => {
     const admListOnlyParacetamol = new AdministrationList([admA, admE]);
     expect(admList.onlyParacetamol()).toEqual(admListOnlyParacetamol)
   });
+
+  it('getEffectAtTime', () => {
+    const admListA = new AdministrationList([admA]);
+    let sampleTimeA = timeZero.getTime() + (0.5*60*60*1000); // +30 min for max effect
+    expect(admListA.getEffectAtTime(sampleTimeA, 'Paracetamol')).toBeCloseTo(1);
+
+    const admListB = new AdministrationList([admA, admB, admC, admD, admE]);
+    const sampleTimeB = timeZero.getTime() + (1.5*60*60*1000); // 1.30 min for 0.5 effect
+    expect(admListB.getEffectAtTime(sampleTimeB, 'Paracetamol')).toBeCloseTo(0.5);
+
+    const timeOne = timeZero.getTime() + (1*60*60*1000);
+    const admListC = new AdministrationList([admA, new Administration(timeOne, pillA, 1000)]);
+    const sampleTimeC = timeZero.getTime() + (2.5*60*60*1000); // 1.30 min for 0.5 effect
+    expect(admListC.getEffectAtTime(sampleTimeC, 'Paracetamol')).toBeCloseTo(0.75);
+  });
 });
