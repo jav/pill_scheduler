@@ -1,7 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-import { describe, it, expect } from 'jest';
 
 import moment from 'moment';
 

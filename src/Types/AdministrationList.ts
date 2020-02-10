@@ -77,8 +77,8 @@ class AdministrationList {
         if (!['nsaid', 'paracetamol'].includes(category.toLowerCase()))
             throw Error("getEffectAtTime() category must be either 'NSAID' or 'Paracetamol'.");
         const filteredList = category.toLowerCase() == 'nsaid' ? this.onlyNSAID() : this.onlyParacetamol();
-        const effectPerAdministrationList = filteredList.administrationList.map((a)=>a.pill.getEffectAtTime(a.time, time));
-        const effectSum = effectPerAdministrationList.reduce((acc, e)=> acc+e);
+        const effectPerAdministrationList = filteredList.administrationList.map((a) => a.pill.getEffectAtTime(a.time, time));
+        const effectSum = effectPerAdministrationList.reduce((acc, e) => acc + e, 0);
         return effectSum;
     }
 
