@@ -54,7 +54,7 @@ export const EffectGraph = (props: Props) => {
                 data={data}
                 keys={keys}
                 colors={colors}
-                curve={shape.curveNatural}
+                curve={shape.curveMonotoneX}
             >
                 <Grid />
             </StackedAreaChart>
