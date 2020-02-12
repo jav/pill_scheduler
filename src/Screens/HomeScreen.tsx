@@ -1,5 +1,7 @@
 import React from 'react';
 
+import moment from 'moment';
+
 import { addAdministration, AppContext } from '../Context/Context';
 import { NavigationStackProp } from 'react-navigation-stack';
 
@@ -24,6 +26,7 @@ export const HomeScreen = (props: Props) => {
     const { time, administrationList: administrations } = state;
     const paracetamolKey = 'Paracetamol';
     const NSAIDKey = 'NSAID';
+    const TestKey = 'TestKey';
 
     function handlePillAdd(time: Date, pillKey: string) {
         if (pillKey === paracetamolKey) {
@@ -48,6 +51,25 @@ export const HomeScreen = (props: Props) => {
                 key: 'returnNavigationKey'
             });
         }
+        if (pillKey == TestKey) {
+            const paraetamolPill = pillsDB.getPill('Paracetamol');
+            const ibuprofenPill = pillsDB.getPill('Ibuprofen');
+
+
+            dispatch(addAdministration(moment().subtract(24, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose));
+            dispatch(addAdministration(moment().subtract(20, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose));
+            dispatch(addAdministration(moment().subtract(16, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose));
+            dispatch(addAdministration(moment().subtract(12, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose));
+            dispatch(addAdministration(moment().subtract(8, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose));
+            dispatch(addAdministration(moment().subtract(4, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose));
+            dispatch(addAdministration(moment().subtract(0, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose));
+            dispatch(addAdministration(moment().subtract(24, 'hours').toDate(), ibuprofenPill, ibuprofenPill.defaultDose));
+            dispatch(addAdministration(moment().subtract(18, 'hours').toDate(), ibuprofenPill, ibuprofenPill.defaultDose));
+            dispatch(addAdministration(moment().subtract(12, 'hours').toDate(), ibuprofenPill, ibuprofenPill.defaultDose));
+            dispatch(addAdministration(moment().subtract(6, 'hours').toDate(), ibuprofenPill, ibuprofenPill.defaultDose));
+            dispatch(addAdministration(moment().subtract(0, 'hours').toDate(), ibuprofenPill, ibuprofenPill.defaultDose));
+
+        }
     }
 
     return (
@@ -66,6 +88,7 @@ export const HomeScreen = (props: Props) => {
                     [
                         { icon: < Icon key={paracetamolKey} name="pill" size={30} color="#fff" />, label: "Paracteamol-label" },
                         { icon: < Icon key={NSAIDKey} name="pill" size={30} color="#fff" />, label: "NSAID" },
+                        { icon: < Icon key={TestKey} name="pill" size={30} color="#fff" />, label: "Test setup" },
                     ]
                 }
                 transition="speedDial"
