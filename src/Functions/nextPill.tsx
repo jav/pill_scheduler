@@ -20,7 +20,7 @@ export const nextParacetamol = (paracetamolList: AdministrationList, currentTime
 
     const totalmg = last24hList.totalMg(SubstanceKey.PARACETAMOL);
 
-    const oldestAdministration = last24hList[last24hList.length() - 1];
+    const oldestAdministration = last24hList.getLatestAdministration();
     if (totalmg >= paracetamol.maxDose24h) {
         return moment(oldestAdministration.time).add(24, 'hours').toDate();
     }
