@@ -70,10 +70,6 @@ class PillsDB {
     }
 
     getAllNSAID() {
-        console.log("getAllNSAID() will return: ", this.pillsDB.filter(
-            (p) => [SubstanceKey.ACETYLICACID, SubstanceKey.DIKLOFENAK, SubstanceKey.IBUPROFEN].includes(p.activeSubstance))
-        );
-        console.log("having filtered the list:", this.pillsDB);
         return this.pillsDB.filter(
             (p) => [SubstanceKey.ACETYLICACID, SubstanceKey.DIKLOFENAK, SubstanceKey.IBUPROFEN].includes(p.activeSubstance));
     }
