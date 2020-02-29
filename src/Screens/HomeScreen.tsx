@@ -2,7 +2,7 @@ import React from 'react';
 
 import moment from 'moment';
 
-import { addAdministration, AppContext } from '../Context/Context';
+import { putAdministration, removeAdministration, AppContext } from '../Context/Context';
 import { NavigationStackProp } from 'react-navigation-stack';
 
 import { ActionButtonFixShadowRadiusNANBug as ActionButton } from '../Components/ActionButtonFixShadowRadiusNANBug';
@@ -14,6 +14,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Pill, pillsDB } from '../Types/Pill';
+import Administration from '../Types/Administration';
 
 interface Props {
     navigation: NavigationStackProp<{}>;
@@ -28,47 +29,69 @@ export const HomeScreen = (props: Props) => {
     const NSAIDKey = 'NSAID';
     const TestKey = 'TestKey';
 
+    function putParacetamol(time: Date, uuid: null | string) {
+        props.navigation.navigate('PickDoseModal', {
+            defaultDose: pillsDB.getPill('Paracetamol').defaultDose,
+            doseList: pillsDB.getPill('Paracetamol').doseList,
+            pickDose: (_doseMg: number): void => {
+                const pill = pillsDB.getPill('Paracetamol')
+                dispatch(putAdministration(time, pill, _doseMg, uuid));
+            }
+        })
+    }
+
+    function putNSAID(time: Date, uuid: null | string) {
+        props.navigation.navigate({
+            routeName: 'PickPillModal',
+            params: {
+                pillOptions: pillsDB.getAllNSAID(),
+                addPill: (pill: Pill, _doseMg: number) => {
+                    dispatch(putAdministration(time, pill, _doseMg, uuid));
+                },
+                returnKey: 'returnNavigationKey'
+            },
+            key: 'returnNavigationKey'
+        });
+    }
+
+    function putAny(time: Date, uuid: null | string) {
+        props.navigation.navigate({
+            routeName: 'PickPillModal',
+            params: {
+                pillOptions: pillsDB.getAll(),
+                addPill: (pill: Pill, _doseMg: number) => {
+                    dispatch(putAdministration(time, pill, _doseMg, uuid));
+                },
+                returnKey: 'returnNavigationKey',
+                remove: true,
+                deletePill: ()=>dispatch(removeAdministration(uuid))
+            },
+            key: 'returnNavigationKey'
+        });
+    }
+
     function handlePillAdd(time: Date, pillKey: string) {
         if (pillKey === paracetamolKey) {
-            props.navigation.navigate('PickDoseModal', {
-                defaultDose: pillsDB.getPill('Paracetamol').defaultDose,
-                doseList: pillsDB.getPill('Paracetamol').doseList,
-                pickDose: (_doseMg: number): void => {
-                    const pill = pillsDB.getPill('Paracetamol')
-                    dispatch(addAdministration(time, pill, _doseMg));
-                }
-            })
+            putParacetamol(time, null)
         }
         if (pillKey === NSAIDKey) {
-            props.navigation.navigate({
-                routeName: 'PickNSAIDModal',
-                params: {
-                    addNSAID: (pill: Pill, dose: number) => {
-                        dispatch(addAdministration(time, pill, dose));
-                    },
-                    returnKey: 'returnNavigationKey'
-                },
-                key: 'returnNavigationKey'
-            });
+            putNSAID(time, null)
         }
         if (pillKey == TestKey) {
             const paraetamolPill = pillsDB.getPill('Paracetamol');
             const ibuprofenPill = pillsDB.getPill('Ibuprofen');
-
-
-            dispatch(addAdministration(moment().subtract(24, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose));
-            dispatch(addAdministration(moment().subtract(20, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose));
-            dispatch(addAdministration(moment().subtract(16, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose));
-            dispatch(addAdministration(moment().subtract(12, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose));
-            dispatch(addAdministration(moment().subtract(8, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose));
-            dispatch(addAdministration(moment().subtract(4, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose));
-            dispatch(addAdministration(moment().subtract(0, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose));
-            dispatch(addAdministration(moment().subtract(24, 'hours').toDate(), ibuprofenPill, ibuprofenPill.defaultDose));
-            dispatch(addAdministration(moment().subtract(18, 'hours').toDate(), ibuprofenPill, ibuprofenPill.defaultDose));
-            dispatch(addAdministration(moment().subtract(12, 'hours').toDate(), ibuprofenPill, ibuprofenPill.defaultDose));
-            dispatch(addAdministration(moment().subtract(6, 'hours').toDate(), ibuprofenPill, ibuprofenPill.defaultDose));
-            dispatch(addAdministration(moment().subtract(0, 'hours').toDate(), ibuprofenPill, ibuprofenPill.defaultDose));
-
+            dispatch(putAdministration(moment().subtract(24, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose, null));
+            dispatch(putAdministration(moment().subtract(20, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose, null));
+            dispatch(putAdministration(moment().subtract(16, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose, null));
+            dispatch(putAdministration(moment().subtract(12, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose, null));
+            dispatch(putAdministration(moment().subtract(8, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose, null));
+            dispatch(putAdministration(moment().subtract(4, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose, null));
+            dispatch(putAdministration(moment().subtract(0, 'hours').toDate(), paraetamolPill, paraetamolPill.defaultDose, null));
+            dispatch(putAdministration(moment().subtract(24, 'hours').toDate(), ibuprofenPill, ibuprofenPill.defaultDose, null));
+            dispatch(putAdministration(moment().subtract(18, 'hours').toDate(), ibuprofenPill, ibuprofenPill.defaultDose, null));
+            dispatch(putAdministration(moment().subtract(12, 'hours').toDate(), ibuprofenPill, ibuprofenPill.defaultDose, null));
+            dispatch(putAdministration(moment().subtract(6, 'hours').toDate(), ibuprofenPill, ibuprofenPill.defaultDose, null));
+            dispatch(putAdministration(moment().subtract(0, 'hours').toDate(), ibuprofenPill, ibuprofenPill.defaultDose, null));
         }
     }
 
@@ -82,7 +105,7 @@ export const HomeScreen = (props: Props) => {
             </TouchableOpacity>
             <EffectGraph administrationList={administrations} currentTime={time} />
             <CountdownTimers administrationList={administrations} currentTime={time} />
-            <AdministrationHistoryView administrationList={administrations} currentTime={time} />
+            <AdministrationHistoryView administrationList={administrations} currentTime={time} editAdministration={(a) => putAny(a.time, a.uuid)} />
             <ActionButton onPress={(pillName) => handlePillAdd(time, pillName)}
                 actions={
                     [

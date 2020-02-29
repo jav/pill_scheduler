@@ -73,6 +73,10 @@ class PillsDB {
         return this.pillsDB.filter(
             (p) => [SubstanceKey.ACETYLICACID, SubstanceKey.DIKLOFENAK, SubstanceKey.IBUPROFEN].includes(p.activeSubstance));
     }
+
+    getAll() {
+        return this.pillsDB;
+    }
 }
 
 export const pillsDB = new PillsDB();

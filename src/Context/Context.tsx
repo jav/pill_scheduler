@@ -34,7 +34,7 @@ export const AppContextConsumer = context.Consumer;
 export const AppContext = context;
 
 
-export type ActionType = ActionSetRealtimeClockMode | ActionUpdateClock | ActionAddAdministration;
+export type ActionType = ActionSetRealtimeClockMode | ActionUpdateClock | ActionAddAdministration | ActionRemoveAdministration;
 
 export const SET_REALTIMECLOCK_MODE = "SET_REALTIMECLOCK_MODE";
 export interface ActionSetRealtimeClockMode {
@@ -62,19 +62,34 @@ export const updateClock = (time: Date): ActionUpdateClock => {
     }
 }
 
-export const ADD_ADMINISTRATION = "ADD_ADMINISTRATION";
+export const PUT_ADMINISTRATION = "PUT_ADMINISTRATION";
 export interface ActionAddAdministration {
-    type: typeof ADD_ADMINISTRATION
+    type: typeof PUT_ADMINISTRATION
     payload: {
         time: Date,
         pill: Pill,
-        dose: number
+        dose: number,
+        uuid: null | string
     }
 }
-export const addAdministration = (time: Date, pill: Pill, dose: number): ActionAddAdministration => {
+export const putAdministration = (time: Date, pill: Pill, dose: number, uuid: null | string): ActionAddAdministration => {
     return {
-        type: ADD_ADMINISTRATION,
-        payload: { time: time, pill: pill, dose: dose }
+        type: PUT_ADMINISTRATION,
+        payload: { time, pill, dose, uuid }
+    }
+}
+
+export const REMOVE_ADMINISTRATION = "REMOVE_ADMINISTRATION";
+export interface ActionRemoveAdministration {
+    type: typeof REMOVE_ADMINISTRATION
+    payload: {
+        uuid: string
+    }
+}
+export const removeAdministration = (uuid: string): ActionRemoveAdministration => {
+    return {
+        type: REMOVE_ADMINISTRATION,
+        payload: { uuid }
     }
 }
 
@@ -93,14 +108,18 @@ export const reducer = (state: IContext, action: ActionType) => {
                 ...state,
                 time: payload.time
             }
-        case ADD_ADMINISTRATION:
-            const adm = new Administration(payload.time, payload.pill, payload.dose);
-            const newAdministrationsList = new AdministrationList(state.administrationList).addAdministration(adm);
+        case PUT_ADMINISTRATION:
+            const adm = new Administration(payload.time, payload.pill, payload.dose, payload.uuid);
+            const newAdministrationList = new AdministrationList(state.administrationList).addAdministration(adm);
             return {
                 ...state,
-                administrations: newAdministrationsList
+                administrationList: newAdministrationList
             }
-                ;
+        case REMOVE_ADMINISTRATION:
+            return {
+                ...state,
+                administrationList: new AdministrationList(state.administrationList.removeAdministration(payload.uuid))
+            }
         default:
             return state;
     }

@@ -28,15 +28,21 @@ class AdministrationList {
 
     }
 
-    addAdministration(adm: Administration) {
-        this.administrationList.push(adm);
-        this.administrationList.sort(
+    addAdministration(adm: Administration): AdministrationList {
+        this.administrationList = this.administrationList.filter((a) => a.uuid !== adm.uuid);
+        this.administrationList = [...this.administrationList, adm];
+        this.administrationList = [...this.administrationList].sort(
             (a: Administration, b: Administration) => b.time.getTime() - a.time.getTime()
         )
         return this;
     }
 
-    getLatestAdministration() {
+    removeAdministration(uuid: string): AdministrationList {
+        this.administrationList = this.administrationList.filter((a) => a.uuid !== uuid);
+        return this;
+    }
+
+    getLatestAdministration(): Administration {
         return this.administrationList[0];
     }
 
