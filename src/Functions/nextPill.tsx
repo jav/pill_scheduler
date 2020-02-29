@@ -55,9 +55,9 @@ export const nextNSAID = (NSAIDList: AdministrationList, currentTime: Date): Nex
 
     const latestAdministration = last24hList.getLatestAdministration();
     retObj = {
-        [SubstanceKey.ACETYLICACID]: moment(latestAdministration.time).add(acetylicAcid.periodicity, 'hours').toDate(),
-        [SubstanceKey.DIKLOFENAK]: moment(latestAdministration.time).add(diklofenak.periodicity, 'hours').toDate(),
-        [SubstanceKey.IBUPROFEN]: moment(latestAdministration.time).add(ibuprofen.periodicity, 'hours').toDate(),
+        [SubstanceKey.ACETYLICACID]: moment(latestAdministration.time).add(acetylicAcid.periodicity, 'millisecond').toDate(),
+        [SubstanceKey.DIKLOFENAK]: moment(latestAdministration.time).add(diklofenak.periodicity, 'millisecond').toDate(),
+        [SubstanceKey.IBUPROFEN]: moment(latestAdministration.time).add(ibuprofen.periodicity, 'millisecond').toDate(),
     };
 
     const totalmgAcetylicacid = last24hList.totalMg(SubstanceKey.ACETYLICACID);
