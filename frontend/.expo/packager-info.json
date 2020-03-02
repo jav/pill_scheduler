@@ -1,0 +1,10 @@
+{
+  "devToolsPort": 19002,
+  "expoServerPort": 19000,
+  "packagerPort": 19003,
+  "packagerPid": 18193,
+  "expoServerNgrokUrl": "https://ys-qfr.javvee.frontend.exp.direct",
+  "packagerNgrokUrl": "https://packager.ys-qfr.javvee.frontend.exp.direct",
+  "ngrokPid": 18260,
+  "webpackServerPort": null
+}
