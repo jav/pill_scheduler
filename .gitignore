@@ -68,6 +68,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-### local Maven conf ###
-.mvn/
