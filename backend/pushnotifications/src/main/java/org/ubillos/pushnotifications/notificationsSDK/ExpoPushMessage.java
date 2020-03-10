@@ -1,24 +1,28 @@
 package org.ubillos.pushnotifications.notificationsSDK;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonSerializable;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 
-public class ExpoPushMessage {
+import java.io.IOException;
+import java.util.*;
 
-    List<String> to;
+public class ExpoPushMessage implements JsonSerializable {
 
-    Map<String, String> data = null;
-    String title = "";
-    String subtitle = "";
-    String body = "";
-    ExpoMessageSound sound = new ExpoMessageSound();
-    long ttl = -1;
-    long expiration = -1;
-    String priority = "";
-    long badge = -1;
-    String channelId = "";
+    public List<String> to = null;
+    public Map<String, String> data = null;
+    public String title = null;
+    public String subtitle = null;
+    public String body = null;
+    public ExpoMessageSound sound = null;
+    public long ttl = -1;
+    public long expiration = -1;
+    private String priority = null;
+    public long badge = -1;
+    public String channelId = null;
 
     public ExpoPushMessage() {
         to = new ArrayList<>();
@@ -44,6 +48,109 @@ public class ExpoPushMessage {
 
     public ExpoPushMessage(String _to) {
         to = Arrays.asList(_to);
+    }
+
+    public void setPriority(String _priority) {
+        if (!_priority.toLowerCase().equals("default") &&
+                !_priority.toLowerCase().equals("high") &&
+                !_priority.toLowerCase().equals("normal")
+        )
+            throw new IllegalArgumentException();
+        priority = _priority;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    String toJson() {
+        Map<String, String> retMap = new HashMap<>();
+        retMap.put("to", to.toString());
+
+        if (data != null) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = null;
+            try {
+                json = objectMapper.writeValueAsString(data);
+                retMap.put("data", json);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            } finally {
+                return null;
+            }
+        }
+        if (title != null)
+            retMap.put("data", title);
+        if (subtitle != null)
+            retMap.put("subtitle", subtitle);
+        if (body != null)
+            retMap.put("data", body);
+        if (sound != null)
+            retMap.put("data", sound.toString());
+        if (title != null)
+            retMap.put("data", title);
+        if (ttl < 0)
+            retMap.put("ttl", Long.toString(ttl));
+        if (expiration < 0)
+            retMap.put("expiration", Long.toString(expiration));
+        if (priority != null)
+            retMap.put("priority", priority);
+        if (badge < 0)
+            retMap.put("badge", Long.toString(badge));
+        if (channelId != null)
+            retMap.put("channelId", channelId);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = null;
+        try {
+            return objectMapper.writeValueAsString(retMap);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    @Override
+    public void serialize(JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+        jsonGenerator.writeStartObject();
+        if (to != null) {
+            jsonGenerator.writeArrayFieldStart("to");
+            for (String recipient : to) {
+                jsonGenerator.writeString(recipient);
+            }
+            jsonGenerator.writeEndArray();
+        }
+        if (data != null)
+            jsonGenerator.writeObjectField("data", data);
+        if (title != null)
+            jsonGenerator.writeStringField("title", title);
+        if (subtitle != null)
+            jsonGenerator.writeStringField("subtitle", subtitle);
+        if (body != null)
+            jsonGenerator.writeStringField("body", body);
+        if (sound != null)
+            jsonGenerator.writeObjectField("sound", sound);
+        if (ttl >= 0)
+            jsonGenerator.writeNumberField("ttl", ttl);
+        if (expiration >= 0)
+            jsonGenerator.writeNumberField("expiration", expiration);
+        if (priority != null)
+            jsonGenerator.writeStringField("priority", priority);
+
+        if (badge >= 0)
+            jsonGenerator.writeNumberField("badge", badge);
+
+        if (channelId != null)
+            jsonGenerator.writeStringField("channelId", channelId);
+
+        jsonGenerator.writeEndObject();
+        return;
+    }
+
+    @Override
+    public void serializeWithType(JsonGenerator jsonGenerator, SerializerProvider serializerProvider, TypeSerializer typeSerializer) throws IOException {
+        throw new UnsupportedOperationException("serializeWithType() not implemented.");
     }
 };
 
