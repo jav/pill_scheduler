@@ -63,54 +63,6 @@ public class ExpoPushMessage implements JsonSerializable {
         return priority;
     }
 
-    String toJson() {
-        Map<String, String> retMap = new HashMap<>();
-        retMap.put("to", to.toString());
-
-        if (data != null) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            String json = null;
-            try {
-                json = objectMapper.writeValueAsString(data);
-                retMap.put("data", json);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            } finally {
-                return null;
-            }
-        }
-        if (title != null)
-            retMap.put("data", title);
-        if (subtitle != null)
-            retMap.put("subtitle", subtitle);
-        if (body != null)
-            retMap.put("data", body);
-        if (sound != null)
-            retMap.put("data", sound.toString());
-        if (title != null)
-            retMap.put("data", title);
-        if (ttl < 0)
-            retMap.put("ttl", Long.toString(ttl));
-        if (expiration < 0)
-            retMap.put("expiration", Long.toString(expiration));
-        if (priority != null)
-            retMap.put("priority", priority);
-        if (badge < 0)
-            retMap.put("badge", Long.toString(badge));
-        if (channelId != null)
-            retMap.put("channelId", channelId);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = null;
-        try {
-            return objectMapper.writeValueAsString(retMap);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
     @Override
     public void serialize(JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
