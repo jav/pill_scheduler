@@ -63,7 +63,6 @@ public class PushnotificationsController {
                 e.printStackTrace();
             }
         }
-
         return new NotifyReply(allTickets);
     }
 }
