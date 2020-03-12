@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.ubillos.pushnotifications.PushnotificationsController;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,7 +17,7 @@ public class ExpoPushTicket implements JsonSerializable {
     public String status = null;
     public String id = null;
     public String message = null;
-    public String details = null;
+    public Details details = null;
 
     Logger logger = LoggerFactory.getLogger(ExpoPushTicket.class);
 
@@ -34,39 +33,25 @@ public class ExpoPushTicket implements JsonSerializable {
         status = _status;
         id = _id;
         message = _message;
-        setDetails(_details);
+        details = new Details(_details);
     }
 
-    public ExpoPushTicket(String json) {
-
-        logger.info("ExpoPushTicket string:" + json);
-
-    }
-
-    public String getDetails() {
+    public Details getDetails() {
         return details;
-    }
-
-    public void setDetails(String _details) {
-        String[] errorDetailsKeys = new String[]{"DeviceNotRegistered", "InvalidCredentials", "MessageTooBig", "MessageRateExceeded"};
-        List<String> errorDetailsKeysList = Arrays.asList(errorDetailsKeys);
-        if (_details != null && !errorDetailsKeysList.contains(_details)) {
-            throw new IllegalArgumentException("Member \"details\" but be one of :" + errorDetailsKeys);
-        }
-        details = _details;
     }
 
     @Override
     public void serialize(JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeStringField("status", status);
-        if(status.equals("ok")) {
-               jsonGenerator.writeStringField("id", id);
+        if (status != null) {
+            if (status.equals("ok")) {
+                jsonGenerator.writeStringField("id", id);
 
-        }
-        else {
-            jsonGenerator.writeStringField("message", message);
-            jsonGenerator.writeStringField("details", details);
+            } else {
+                jsonGenerator.writeStringField("message", message);
+                jsonGenerator.writeObjectField("details", details);
+            }
         }
         jsonGenerator.writeEndObject();
         return;
@@ -75,5 +60,27 @@ public class ExpoPushTicket implements JsonSerializable {
     @Override
     public void serializeWithType(JsonGenerator jsonGenerator, SerializerProvider serializerProvider, TypeSerializer typeSerializer) throws IOException {
         throw new UnsupportedOperationException("serializeWithType() not implemented.");
+    }
+
+    public static class Details {
+        private String error;
+
+        public Details(String _error) {
+            setError(_error);
+        }
+
+        public void setError(String _error) {
+            String[] errorDetailsKeys = new String[]{"DeviceNotRegistered", "InvalidCredentials",
+                    "MessageTooBig", "MessageRateExceeded"};
+            List<String> errorDetailsKeysList = Arrays.asList(errorDetailsKeys);
+            if (_error != null && !errorDetailsKeysList.contains(_error)) {
+                throw new IllegalArgumentException("Member \"details\" but be one of :" + errorDetailsKeys);
+            }
+            error = _error;
+        }
+
+        public String getError() {
+            return error;
+        }
     }
 }
