@@ -21,7 +21,7 @@ public class ExpoPushTicket implements JsonSerializable {
 
     Logger logger = LoggerFactory.getLogger(ExpoPushTicket.class);
 
-    ExpoPushTicket() {
+    public ExpoPushTicket() {
     }
 
 
