@@ -9,7 +9,10 @@ import org.ubillos.pushnotifications.notificationsSDK.ExpoPushMessage;
 import org.ubillos.pushnotifications.notificationsSDK.ExpoPushTicket;
 import org.ubillos.pushnotifications.notificationsSDK.PushClient;
 
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -17,20 +20,37 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 public class PushnotificationsController {
+    static final String DB_NAME = "RecieptDB";
+    ReceiptDB receiptDB;
+    {
+        try {
+            receiptDB = ReceiptDB.getInstance(DB_NAME);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     Logger logger = LoggerFactory.getLogger(PushnotificationsController.class);
 
     @PostMapping(path = "/notify", consumes = "application/json", produces = "application/json")
     public NotifyReply notify(
             @RequestBody(required = false) NotifyRequestBody notifyRequest) {
         logger.info("notifyRequest:" + notifyRequest.toString());
-        logger.info("to:" + notifyRequest.to);
-        logger.info("title:" + notifyRequest.title);
-        logger.info("subtitle:" + notifyRequest.subtitle);
-        logger.info("body:" + notifyRequest.body);
 
-        for (String recipient : notifyRequest.to)
-            if (!PushClient.isExponentPushToken(recipient))
-                throw new Error("Token:"+recipient+" is not a valid token."); // TODO: Return some sensible error message over HTTP
+        for (String receipient : notifyRequest.to)
+            if (!PushClient.isExponentPushToken(receipient))
+                throw new Error("Token:" + receipient + " is not a valid token."); // TODO: Return some sensible error message over HTTP
+
+        for (String receipient : notifyRequest.to) {
+            try {
+                if (receiptDB.isRecipientRedFlagged(receipient, LocalDateTime.now())) {
+                    throw new Error("Token:" + receipient + " is a flagged recepient."); // TODO: Return some sensible error message over HTTP
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            ;
+        }
 
         PushClient client = new PushClient();
         List<ExpoPushMessage> messages = new ArrayList<>();
@@ -54,7 +74,7 @@ public class PushnotificationsController {
         List<ExpoPushTicket> allTickets = new ArrayList<>();
         for (CompletableFuture<List<ExpoPushTicket>> messageReplyFuture : messageRepliesFutures) {
             try {
-                for(ExpoPushTicket ticket: messageReplyFuture.get()) {
+                for (ExpoPushTicket ticket : messageReplyFuture.get()) {
                     allTickets.add(ticket);
                 }
             } catch (InterruptedException e) {
