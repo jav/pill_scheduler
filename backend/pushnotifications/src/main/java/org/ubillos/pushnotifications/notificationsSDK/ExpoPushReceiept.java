@@ -13,23 +13,23 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class ExpoPushReciept implements JsonSerializable {
+public class ExpoPushReceiept implements JsonSerializable {
     public String status = null;
     public String id = null;
     public String message = null;
     public Details details = null;
 
-    Logger logger = LoggerFactory.getLogger(ExpoPushReciept.class);
+    Logger logger = LoggerFactory.getLogger(ExpoPushReceiept.class);
 
-    ExpoPushReciept() {
+    public ExpoPushReceiept() {
     }
 
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    ExpoPushReciept(@JsonProperty("status") String _status,
-                   @JsonProperty("id") String _id,
-                   @JsonProperty("message") String _message,
-                   @JsonProperty("details") String _details) {
+    ExpoPushReceiept(@JsonProperty("status") String _status,
+                     @JsonProperty("id") String _id,
+                     @JsonProperty("message") String _message,
+                     @JsonProperty("details") String _details) {
         status = _status;
         id = _id;
         message = _message;
