@@ -21,30 +21,33 @@ import java.util.concurrent.ExecutionException;
 @RestController
 public class PushnotificationsController {
     static final String DB_NAME = "RecieptDB";
-    ReceiptDB receiptDB;
-    {
-        try {
-            receiptDB = ReceiptDB.getInstance(DB_NAME);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     Logger logger = LoggerFactory.getLogger(PushnotificationsController.class);
+
+    /*
+     *  curl localhost:8080/notify -X POST -H "Content-type: application/json " -d '{"to":["ExponentPushToken[xyz]"], "title":"foobar"}
+     */
 
     @PostMapping(path = "/notify", consumes = "application/json", produces = "application/json")
     public NotifyReply notify(
             @RequestBody(required = false) NotifyRequestBody notifyRequest) {
         logger.info("notifyRequest:" + notifyRequest.toString());
+        ReceiptDB receiptDB = null;
+        try {
+            receiptDB = ReceiptDB.getInstance(DB_NAME);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new NotifyReply("Error: could not get DB instance");
+        }
 
         for (String receipient : notifyRequest.to)
             if (!PushClient.isExponentPushToken(receipient))
-                throw new Error("Token:" + receipient + " is not a valid token."); // TODO: Return some sensible error message over HTTP
+                return new NotifyReply("Token:" + receipient + " is not a valid token."); // TODO: Return some sensible error message over HTTP
 
         for (String receipient : notifyRequest.to) {
             try {
                 if (receiptDB.isRecipientRedFlagged(receipient, LocalDateTime.now())) {
-                    throw new Error("Token:" + receipient + " is a flagged recepient."); // TODO: Return some sensible error message over HTTP
+                    return new NotifyReply("Token:" + receipient + " is a flagged recepient."); // TODO: Return some sensible error message over HTTP
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
