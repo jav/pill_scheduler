@@ -30,34 +30,35 @@ public class PushnotificationsController {
 
     @PostMapping(path = "/notify", consumes = "application/json", produces = "application/json")
     public NotifyReply notify(
-            @RequestBody(required = false) NotifyRequestBody notifyRequest) {
+            @RequestBody(required = false) NotifyRequestBody notifyRequest) throws SQLException {
         logger.info("notifyRequest:" + notifyRequest.toString());
-        ReceiptDB receiptDB = null;
+        ReceiptDB notFinalReceiptDB = null;
         try {
-            receiptDB = ReceiptDB.getInstance(DB_NAME);
+            notFinalReceiptDB = ReceiptDB.getInstance(DB_NAME);
         } catch (SQLException e) {
             e.printStackTrace();
             return new NotifyReply("Error: could not get DB instance");
         }
+        final ReceiptDB receiptDB = notFinalReceiptDB;
 
-        for (String receipient : notifyRequest.to)
-            if (!PushClient.isExponentPushToken(receipient))
-                return new NotifyReply("Token:" + receipient + " is not a valid token."); // TODO: Return some sensible error message over HTTP
+        final PushClient client = new PushClient();
 
-        for (String receipient : notifyRequest.to) {
-            try {
-                if (receiptDB.isRecipientRedFlagged(receipient, LocalDateTime.now())) {
-                    return new NotifyReply("Token:" + receipient + " is a flagged recepient."); // TODO: Return some sensible error message over HTTP
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+        List<ExpoPushMessage> messages = new ArrayList<>();
+        List<String> invalidRecipients = new ArrayList<>();
+        List<FlaggedRecipients> flaggedRecipients = new ArrayList<>();
+
+        ExpoPushMessage epm = new ExpoPushMessage();
+
+        for (String recipient : notifyRequest.to) {
+            if (!PushClient.isExponentPushToken(recipient)) {
+                invalidRecipients.add(recipient);
+            } else if (receiptDB.isRecipientRedFlagged(recipient, LocalDateTime.now())) {
+                flaggedRecipients.add(new FlaggedRecipients(recipient, receiptDB.getFlagReasons(recipient)));
+            } else {
+                epm.to.add(recipient);
             }
-            ;
         }
 
-        PushClient client = new PushClient();
-        List<ExpoPushMessage> messages = new ArrayList<>();
-        ExpoPushMessage epm = new ExpoPushMessage(notifyRequest.to);
         if (notifyRequest.title != null)
             epm.title = notifyRequest.title;
         if (notifyRequest.subtitle != null)
@@ -86,6 +87,7 @@ public class PushnotificationsController {
                 e.printStackTrace();
             }
         }
-        return new NotifyReply(allTickets);
+
+        return new NotifyReply(allTickets, invalidRecipients, flaggedRecipients);
     }
 }

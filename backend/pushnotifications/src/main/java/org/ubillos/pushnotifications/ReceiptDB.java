@@ -14,7 +14,9 @@ import java.nio.file.Paths;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ReceiptDB {
@@ -190,5 +192,27 @@ public class ReceiptDB {
         PreparedStatement pstmt = dbConnection.prepareStatement(sql);
         pstmt.setTimestamp(1, Timestamp.valueOf(currentDate.plusSeconds(secondsTTL)));
         pstmt.executeUpdate();
+    }
+
+    public List<String> getFlagReasons(String recipient) throws SQLException {
+
+        String sql = "SELECT receipt.detailsError as error \n"
+                + "FROM ticket JOIN receipt ON ticket.id = receipt.id \n"
+                + "WHERE receipt.status == 'error' AND ticket.recipient like ?";
+        PreparedStatement pstmt = dbConnection.prepareStatement(sql);
+        pstmt.setString(1, recipient);
+        ResultSet rs = null;
+
+        try {
+            rs = pstmt.executeQuery();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        List<String> errors = new ArrayList<>();
+        while (rs.next()) {
+            errors.add(rs.getString("error"));
+        }
+        return errors;
     }
 }

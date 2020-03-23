@@ -12,10 +12,17 @@ import java.util.List;
 
 public class NotifyReply implements JsonSerializable {
     public List<ExpoPushTicket> tickets;
+    public List<String> invalidRecipients;
+    public List<FlaggedRecipients> flaggedRecipients;
+
     public String error = null;
 
-    public NotifyReply(List<ExpoPushTicket> _tickets) {
+    public NotifyReply(List<ExpoPushTicket> _tickets,
+                       List<String> _invalidRecipients,
+                       List<FlaggedRecipients> _flaggedRecipients) {
         tickets = _tickets;
+        invalidRecipients = _invalidRecipients;
+        flaggedRecipients = _flaggedRecipients;
     }
 
     public NotifyReply(String _error) {

@@ -8,6 +8,7 @@ import org.ubillos.pushnotifications.notificationsSDK.ExpoPushTicket;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -62,11 +63,11 @@ class ReceiptDBTest {
             ept = new ExpoPushTicket();
             ept.status = "ok";
             ept.id = Integer.toString(i);
-            db.addTicket(recipients[i], ept, LocalDateTime.of(1,1,1,1,1));
+            db.addTicket(recipients[i], ept, LocalDateTime.of(1, 1, 1, 1, 1));
 
             epr = new ExpoPushReceiept();
             epr.id = Integer.toString(i);
-            if(i%2==0) {
+            if (i % 2 == 0) {
                 epr.status = "error";
                 epr.message = "mock message";
                 epr.details = new ExpoPushReceiept.Details("DeviceNotRegistered");
@@ -74,19 +75,51 @@ class ReceiptDBTest {
                 epr.status = "ok";
                 epr.id = Integer.toString(i);
             }
-            db.addReciept(epr, LocalDateTime.of(1,1,1,1,1));
+            db.addReciept(epr, LocalDateTime.of(1, 1, 1, 1, 1));
         }
 
         try {
-            assertTrue( db.isRecipientRedFlagged("A", LocalDateTime.of(1, 1, 1, 1, 1)));
+            assertTrue(db.isRecipientRedFlagged("A", LocalDateTime.of(1, 1, 1, 1, 1)));
             assertFalse(db.isRecipientRedFlagged("B", LocalDateTime.of(1, 1, 1, 1, 1)));
-            assertTrue( db.isRecipientRedFlagged("C", LocalDateTime.of(1, 1, 1, 1, 1)));
-            assertFalse( db.isRecipientRedFlagged("D", LocalDateTime.of(1, 1, 1, 1, 1)));
+            assertTrue(db.isRecipientRedFlagged("C", LocalDateTime.of(1, 1, 1, 1, 1)));
+            assertFalse(db.isRecipientRedFlagged("D", LocalDateTime.of(1, 1, 1, 1, 1)));
             assertTrue(db.isRecipientRedFlagged("E", LocalDateTime.of(1, 1, 1, 1, 1)));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
+
+    @Test
+    void getFlagReason() throws SQLException {
+        ReceiptDB db = ReceiptDB.getInstance(TEST_DB_NAME);
+
+        ExpoPushTicket ept1 = new ExpoPushTicket();
+        ept1.status = "ok";
+        ept1.id = Integer.toString(1);
+        db.addTicket("A", ept1, LocalDateTime.of(1, 1, 1, 1, 1));
+
+        ExpoPushReceiept epr1 = new ExpoPushReceiept();
+        epr1.id = Integer.toString(1);
+        epr1.status = "error";
+        epr1.message = "mock message";
+        epr1.details = new ExpoPushReceiept.Details("DeviceNotRegistered");
+        db.addReciept(epr1, LocalDateTime.of(1, 1, 1, 1, 1));
+
+        ExpoPushTicket ept2 = new ExpoPushTicket();
+        ept2.status = "ok";
+        ept2.id = Integer.toString(2);
+        db.addTicket("A", ept2, LocalDateTime.of(1, 1, 1, 1, 1));
+
+        ExpoPushReceiept epr2 = new ExpoPushReceiept();
+        epr2.id = Integer.toString(2);
+        epr2.status = "error";
+        epr2.message = "mock message";
+        epr2.details = new ExpoPushReceiept.Details("MessageRateExceeded");
+        db.addReciept(epr2, LocalDateTime.of(1, 1, 1, 1, 1));
+
+        assertEquals(Arrays.asList("DeviceNotRegistered", "MessageRateExceeded"), db.getFlagReasons("A"));
+    }
+
 
     @Test
     void removeStaleTickets() throws SQLException {
@@ -112,7 +145,7 @@ class ReceiptDBTest {
         assertEquals(2, db.getTicketCount());
         assertEquals(1, db.getRecieptCount());
 
-        db.removeStaleTickets(LocalDateTime.of(1,1,2,1,1,1), 2*24*60*60); // Two days ttl
+        db.removeStaleTickets(LocalDateTime.of(1, 1, 2, 1, 1, 1), 2 * 24 * 60 * 60); // Two days ttl
         assertEquals(1, db.getTicketCount());
         assertEquals(1, db.getRecieptCount());
     }
@@ -142,7 +175,7 @@ class ReceiptDBTest {
         assertEquals(1, db.getTicketCount());
         assertEquals(2, db.getRecieptCount());
 
-        db.removeStaleReceipts(LocalDateTime.of(1,1,2,1,1,1), 2*24*60*60); // Two days ttl
+        db.removeStaleReceipts(LocalDateTime.of(1, 1, 2, 1, 1, 1), 2 * 24 * 60 * 60); // Two days ttl
         assertEquals(1, db.getTicketCount());
         assertEquals(1, db.getRecieptCount());
 
