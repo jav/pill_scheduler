@@ -14,13 +14,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 
 @RestController
 public class PushnotificationsController {
-    static final String DB_NAME = "RecieptDB";
+    static final String DB_NAME = "ReceiptDB";
 
     Logger logger = LoggerFactory.getLogger(PushnotificationsController.class);
 
@@ -31,15 +32,16 @@ public class PushnotificationsController {
     @PostMapping(path = "/notify", consumes = "application/json", produces = "application/json")
     public NotifyReply notify(
             @RequestBody(required = false) NotifyRequestBody notifyRequest) throws SQLException {
+
         logger.info("notifyRequest:" + notifyRequest.toString());
-        ReceiptDB notFinalReceiptDB = null;
+
+        ReceiptDB receiptDB = null;
         try {
-            notFinalReceiptDB = ReceiptDB.getInstance(DB_NAME);
+            receiptDB = ReceiptDB.getInstance(DB_NAME);
         } catch (SQLException e) {
             e.printStackTrace();
             return new NotifyReply("Error: could not get DB instance");
         }
-        final ReceiptDB receiptDB = notFinalReceiptDB;
 
         final PushClient client = new PushClient();
 
@@ -59,12 +61,17 @@ public class PushnotificationsController {
             }
         }
 
-        if (notifyRequest.title != null)
-            epm.title = notifyRequest.title;
-        if (notifyRequest.subtitle != null)
-            epm.subtitle = notifyRequest.subtitle;
-        if (notifyRequest.body != null)
-            epm.body = notifyRequest.body;
+        epm.title = notifyRequest.title;
+        epm.subtitle = notifyRequest.subtitle;
+        epm.body = notifyRequest.body;
+        epm.data = notifyRequest.data;
+        epm.sound = notifyRequest.sound;
+        epm.ttl = notifyRequest.ttl;
+        epm.expiration = notifyRequest.expiration;
+        epm.setPriority(notifyRequest.priority);
+        epm.badge = notifyRequest.badge;
+        epm.channelId = notifyRequest.channelId;
+
         messages.add(epm);
 
         List<List<ExpoPushMessage>> chunks = client.chunkPushNotifications(messages);
