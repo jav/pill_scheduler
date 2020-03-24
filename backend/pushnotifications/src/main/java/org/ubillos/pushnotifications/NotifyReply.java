@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializable;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
-import org.ubillos.pushnotifications.notificationsSDK.ExpoPushTicket;
+import io.github.jav.exposerversdk.ExpoPushTicket;
 
 import java.io.IOException;
 import java.util.List;

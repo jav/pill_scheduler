@@ -3,8 +3,8 @@ package org.ubillos.pushnotifications;
 import jdk.management.jfr.RecordingInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.ubillos.pushnotifications.notificationsSDK.ExpoPushReceiept;
-import org.ubillos.pushnotifications.notificationsSDK.ExpoPushTicket;
+import io.github.jav.exposerversdk.ExpoPushReceiept;
+import io.github.jav.exposerversdk.ExpoPushTicket;
 
 import java.io.IOException;
 import java.nio.file.Files;

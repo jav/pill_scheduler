@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.ubillos.pushnotifications.notificationsSDK.ExpoPushMessage;
-import org.ubillos.pushnotifications.notificationsSDK.ExpoPushTicket;
-import org.ubillos.pushnotifications.notificationsSDK.PushClient;
+import io.github.jav.exposerversdk.ExpoPushMessage;
+import io.github.jav.exposerversdk.ExpoPushTicket;
+import io.github.jav.exposerversdk.PushClient;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;

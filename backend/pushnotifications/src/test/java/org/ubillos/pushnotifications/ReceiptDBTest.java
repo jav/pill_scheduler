@@ -3,8 +3,8 @@ package org.ubillos.pushnotifications;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.ubillos.pushnotifications.notificationsSDK.ExpoPushReceiept;
-import org.ubillos.pushnotifications.notificationsSDK.ExpoPushTicket;
+import io.github.jav.exposerversdk.ExpoPushReceiept;
+import io.github.jav.exposerversdk.ExpoPushTicket;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;

@@ -1,6 +1,7 @@
 package org.ubillos.pushnotifications;
 
-import org.ubillos.pushnotifications.notificationsSDK.ExpoMessageSound;
+import io.github.jav.exposerversdk.ExpoMessageSound;
+import io.github.jav.exposerversdk.ExpoPushReceiept;
 
 import java.util.List;
 import java.util.Map;
